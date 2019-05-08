@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- ManagerMapper.xml
+     create by noTalent
+     2019.04.18 -->
+<mapper namespace="com.notalent.bookstore.mapper.ManagerMapper">
+
+    <!-- managerMap -->
+    <resultMap id="managerMap" type="com.notalent.bookstore.pojo.manager.Manager">
+        <id property="managerId" column="manager_id" />
+        <result property="username" column="username" />
+        <result property="password" column="password" />
+        <result property="salt" column="salt" />
+        <result property="createTime" column="create_time" javaType="java.util.Date" />
+        <result property="updateTime" column="update_time" javaType="java.util.Date" />
+        <!-- 角色列表 -->
+        <collection property="roles" ofType="com.notalent.bookstore.pojo.manager.Role">
+            <id property="roleId" column="role_id" />
+            <result property="roleName" column="role_name" />
+            <result property="createTime" column="create_time" javaType="java.util.Date" />
+            <!-- 权限列表 -->
+            <collection property="permissions" ofType="com.notalent.bookstore.pojo.manager.Permission">
+                <id property="permissionId" column="permission_id" />
+                <result property="permissionName" column="permission_name" />
+                <result property="permissionUrl" column="permission_url" />
+                <result property="createTime" column="create_time" javaType="java.util.Date" />
+            </collection>
+        </collection>
+    </resultMap>
+    
+    <!-- 添加管理员 -->
+    <insert id="addManager" parameterType="com.notalent.bookstore.pojo.manager.Manager"
+            useGeneratedKeys="true" keyProperty="managerId">
+        insert into manager (username, password, salt, create_time, update_time)
+          values (#{username}, #{password}, #{salt}, #{createTime}, #{updateTime})
+    </insert>
+
+    <!-- 添加角色 -->
+    <insert id="addRole" parameterType="com.notalent.bookstore.pojo.manager.Role"
+            useGeneratedKeys="true" keyProperty="roleId">
+        insert into role (role_name, create_time) values (#{roleName}, #{createTime})
+    </insert>
+
+    <!-- 添加权限 -->
+    <insert id="addPermission" parameterType="com.notalent.bookstore.pojo.manager.Permission"
+            useGeneratedKeys="true" keyProperty="permissionId">
+        insert into permission (permission_name, permission_url, create_time)
+          values (#{permissionName}, #{permissionUrl}, #{createTime})
+    </insert>
+
+    <!-- 添加角色权限 -->
+    <insert id="addRolePerm" parameterType="com.notalent.bookstore.pojo.manager.RolePermission">
+        insert into role_permission values (#{roleId}, #{permissionId}, #{createTime})
+    </insert>
+
+    <!-- 添加管理员角色 -->
+    <insert id="addManagerRole" parameterType="com.notalent.bookstore.pojo.manager.ManagerRole">
+        insert into manager_role values (#{managerId}, #{roleId}, #{createTime})
+    </insert>
+
+    <!-- 根据用户名查询管理员 -->
+    <select id="findByUsername" parameterType="java.lang.String" resultMap="managerMap">
+        select m.*, r.*, p.*
+        from manager m
+          inner join manager_role mr on mr.manager_id = m.manager_id
+          inner join role r on r.role_id = mr.role_id
+          inner join role_permission rp on rp.role_id = r.role_id
+          inner join permission p on p.permission_id = rp.permission_id
+        where m.username = #{username} limit 1
+    </select>
+
+    <!-- 获取盐值 -->
+    <select id="findSaltByUsername" parameterType="java.lang.String" resultType="java.lang.String">
+        select salt from manager where username = #{username} limit 1
+    </select>
+
+    <!-- 获取密码 -->
+    <select id="findPasswordByUsername" parameterType="java.lang.String" resultMap="managerMap">
+        select password, salt from manager where username = #{username} limit 1
+    </select>
+
+    <!-- 修改管理员密码 -->
+    <update id="alterPassword" parameterType="com.notalent.bookstore.pojo.manager.Manager">
+        update manager set password = #{password}, salt = #{salt}, update_time = #{updateTime}
+          where username = #{username} limit 1
+    </update>
+
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- UserMapper.xml
+     create by noTalent
+     2019.05.08 -->
+<mapper namespace="com.notalent.bookstore.mapper.UserMapper">
+
+    <!-- userMap -->
+    <resultMap id="userMap" type="com.notalent.bookstore.pojo.user.UserInfo">
+        <id column="user_info_id" property="userInfoId" />
+        <result column="username" property="username" />
+        <result column="salt" property="salt" />
+        <result column="password" property="password" />
+        <result column="user_phone" property="userPhone" />
+        <result column="user_email" property="userEmail" />
+        <result column="user_status" property="userStatus" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <association property="userDetail" javaType="com.notalent.bookstore.pojo.user.UserDetail">
+            <id column="user_detail_id" property="userDetailId" />
+            <result column="user_info_id" property="userInfoId" />
+            <result column="user_img" property="userImg" />
+            <result column="user_nickname" property="userNickname" />
+            <result column="user_gender" property="userGender" />
+            <result column="user_birthday" property="userBirthday" />
+            <result column="create_time" property="createTime" />
+            <result column="update_time" property="updateTime" />
+        </association>
+    </resultMap>
+
+    <!-- 添加用户信息 -->
+    <insert id="addUserInfo" parameterType="com.notalent.bookstore.pojo.user.UserInfo">
+        insert into user_info (username, salt, password, user_phone, user_email)
+        values (#{username}, #{salt}, #{password}, #{userPhone}, #{userEmail})
+    </insert>
+
+    <!-- 查询用户 -->
+    <select id="getPasswordAndSalt" parameterType="java.lang.String" resultMap="userMap">
+        select password, salt from user_info where username = #{username}
+    </select>
+
+
+</mapper>
