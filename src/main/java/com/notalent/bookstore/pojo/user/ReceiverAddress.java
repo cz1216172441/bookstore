@@ -2,6 +2,7 @@ package com.notalent.bookstore.pojo.user;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -12,7 +13,9 @@ import java.util.Date;
  */
 
 @Data
-public class ReceiverAddress {
+public class ReceiverAddress implements Serializable {
+
+    private static final long serialVersionUID = 6203402493595658039L;
 
     private Integer receiverAddressId;  // 收货地址id
 

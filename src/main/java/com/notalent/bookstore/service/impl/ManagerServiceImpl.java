@@ -3,7 +3,7 @@ package com.notalent.bookstore.service.impl;
 import com.notalent.bookstore.mapper.ManagerMapper;
 import com.notalent.bookstore.pojo.manager.*;
 import com.notalent.bookstore.service.ManagerService;
-import com.notalent.bookstore.shiro.ShiroUtil;
+import com.notalent.bookstore.shiro.ShiroUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,8 +24,8 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public Integer addManager(Manager manager) {
         // 加盐加密
-        String salt = ShiroUtil.getSalt();
-        String pwd = ShiroUtil.encrypt(manager.getPassword(), salt);
+        String salt = ShiroUtils.getSalt();
+        String pwd = ShiroUtils.encrypt(manager.getPassword(), salt);
         manager.setSalt(salt);
         manager.setPassword(pwd);
         // 设置时间
@@ -55,8 +55,8 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public Integer alterPassword(Manager manager) {
         // 获取新的随机盐值并加密新密码
-        String salt = ShiroUtil.getSalt();
-        String pwd = ShiroUtil.encrypt(manager.getPassword(), salt);
+        String salt = ShiroUtils.getSalt();
+        String pwd = ShiroUtils.encrypt(manager.getPassword(), salt);
         manager.setSalt(salt);
         manager.setPassword(pwd);
         // 设置修改时间

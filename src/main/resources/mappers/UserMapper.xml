@@ -31,15 +31,34 @@
     </resultMap>
 
     <!-- 添加用户信息 -->
-    <insert id="addUserInfo" parameterType="com.notalent.bookstore.pojo.user.UserInfo">
+    <insert id="addUserInfo" parameterType="com.notalent.bookstore.pojo.user.UserInfo"
+            useGeneratedKeys="true" keyProperty="userInfoId">
         insert into user_info (username, salt, password, user_phone, user_email)
         values (#{username}, #{salt}, #{password}, #{userPhone}, #{userEmail})
     </insert>
 
+    <!-- 添加用户详情 -->
+    <insert id="addUserDetail" parameterType="com.notalent.bookstore.pojo.user.UserDetail">
+        insert into user_detail (user_info_id, user_nickname) values (#{userInfoId}, #{userNickname})
+    </insert>
+
+    <!-- 根据用户id 获取用户信息 -->
+    <select id="getUserInfoById" parameterType="java.lang.Integer" resultMap="userMap">
+        select * from user_info where user_info_id = #{userInfoId} limit 1
+    </select>
+
     <!-- 查询用户 -->
     <select id="getPasswordAndSalt" parameterType="java.lang.String" resultMap="userMap">
-        select password, salt from user_info where username = #{username}
+        select user_info_id, password, salt from user_info where username = #{username} limit 1
     </select>
+
+    <!-- 修改密码 -->
+    <update id="alterPassword" parameterType="com.notalent.bookstore.pojo.user.UserInfo">
+        update user_info
+        set password = #{password}, salt = #{salt}
+        where username = #{username}
+        limit 1
+    </update>
 
 
 </mapper>

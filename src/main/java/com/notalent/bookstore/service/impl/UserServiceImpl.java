@@ -1,12 +1,13 @@
 package com.notalent.bookstore.service.impl;
 
 import com.notalent.bookstore.mapper.UserMapper;
+import com.notalent.bookstore.pojo.user.UserDetail;
 import com.notalent.bookstore.pojo.user.UserInfo;
 import com.notalent.bookstore.service.UserService;
-import com.notalent.bookstore.shiro.ShiroUtil;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.notalent.bookstore.shiro.ShiroUtils;
+import com.notalent.bookstore.util.IntegerUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -23,26 +24,40 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public Integer addUserInfo(UserInfo userInfo) {
+    @Transactional
+    public Integer register(UserInfo userInfo) {
         // 加盐加密
-        String salt = ShiroUtil.getSalt();
+        String salt = ShiroUtils.getSalt();
         userInfo.setSalt(salt);
-        userInfo.setPassword(ShiroUtil.encrypt(userInfo.getPassword(), salt));
-        // 手机号码与电子邮箱不为null
-        if (StringUtils.isBlank(userInfo.getUserPhone())) {
-            userInfo.setUserPhone("");
+        userInfo.setPassword(ShiroUtils.encrypt(userInfo.getPassword(), salt));
+        // 插入数据库
+        Integer res = userMapper.addUserInfo(userInfo);
+        if (IntegerUtils.isError(res)) {
+            return IntegerUtils.ZERO;
         }
-        if (StringUtils.isBlank(userInfo.getUserEmail())) {
-            userInfo.setUserEmail("");
-        }
-        return userMapper.addUserInfo(userInfo);
+        UserDetail ud = new UserDetail(userInfo.getUserInfoId(), userInfo.getUsername());
+        return userMapper.addUserDetail(ud);
     }
 
     @Override
-    public Boolean login(UserInfo ui) {
+    public Integer login(UserInfo ui) {
         UserInfo userInfo = userMapper.getPasswordAndSalt(ui.getUsername());
         // 加盐加密比对密码
-        return ShiroUtil.encrypt(ui.getPassword(), userInfo.getSalt()).equals(userInfo.getPassword());
+        if (ShiroUtils.encrypt(ui.getPassword(), userInfo.getSalt()).equals(userInfo.getPassword())) {
+            return userInfo.getUserInfoId();
+        }
+        return IntegerUtils.ZERO;
     }
 
+    @Override
+    public Integer alterPassword(UserInfo userInfo) {
+        userInfo.setSalt(ShiroUtils.getSalt());
+        userInfo.setPassword(ShiroUtils.encrypt(userInfo.getPassword(), userInfo.getSalt()));
+        return userMapper.alterPassword(userInfo);
+    }
+
+    @Override
+    public UserInfo getUserInfoById(Integer userInfoId) {
+        return userMapper.getUserInfoById(userInfoId);
+    }
 }

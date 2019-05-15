@@ -6,7 +6,9 @@ package com.notalent.bookstore.util;
  * @version 1.0
  * 2019.05.09
  */
-public class IntegerUtil {
+public class IntegerUtils {
+
+    public static final Integer ZERO = 0;
 
     public static boolean isEmpty(Integer num) {
         return num == null;
@@ -17,7 +19,11 @@ public class IntegerUtil {
     }
 
     public static boolean isError(Integer num) {
-        return isEmpty(num) && num == 0 ? true : false;
+        return isEmpty(num) || num == 0 ? true : false;
+    }
+
+    public static boolean isNotError(Integer num) {
+        return !isError(num) && num > 0;
     }
 
 }

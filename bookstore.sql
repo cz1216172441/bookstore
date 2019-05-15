@@ -151,8 +151,8 @@ create table if not exists user_info (
     username varchar(32) not null default '' comment '用户名',
     salt varchar(64) not null default '' comment '盐值',
     password varchar(64) not null default '' comment '密码',
-    user_phone varchar(11) not null default '' comment '手机号码',
-    user_email varchar(32) not null default '' comment '电子邮箱',
+    user_phone varchar(11) comment '手机号码',
+    user_email varchar(32) comment '电子邮箱',
     user_status tinyint(1) not null default 1 comment '用户状态：0禁止 1正在使用',
     create_time timestamp not null default current_timestamp comment '创建时间',
     update_time timestamp not null default current_timestamp
@@ -175,7 +175,7 @@ create table if not exists user_detail (
     update_time timestamp not null default current_timestamp
         on update current_timestamp comment '更新时间',
     primary key (user_detail_id),
-    unique key (user_img)
+    unique key (user_info_id)
 );
 
 --  receiver_address 收货地址
@@ -272,16 +272,15 @@ create table if not exists advertisement_detail (
 --
 
 -- shopping_cart_info 购物车信息
-create table if not exists shopping_cart_info (
-    shopping_cart_info_id int(11) not null auto_increment comment '购物车信息id',
+create table if not exists shopping_cart (
+    shopping_cart_id int(11) not null auto_increment comment '购物车信息id',
     user_info_id int(11) not null comment '用户信息id',
     book_info_id int(11) not null comment '图书信息id',
     book_quantity int(11) not null default 1 comment '图书数量',
     create_time timestamp not null default current_timestamp comment '创建时间',
     update_time timestamp not null default current_timestamp
         on update current_timestamp comment '更新时间',
-    primary key (shopping_cart_info_id),
-    unique key (user_info_id)
+    primary key (shopping_cart_id)
 );
 
 

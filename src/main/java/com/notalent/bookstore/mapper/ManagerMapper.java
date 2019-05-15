@@ -1,6 +1,7 @@
 package com.notalent.bookstore.mapper;
 
 import com.notalent.bookstore.pojo.manager.*;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 管理员mapper层
@@ -8,6 +9,7 @@ import com.notalent.bookstore.pojo.manager.*;
  * @version 1.0
  * 2019.04.18
  */
+@Mapper
 public interface ManagerMapper {
 
     Integer addManager(Manager manager);             // 添加管理员

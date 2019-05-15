@@ -10,7 +10,7 @@ import java.util.UUID;
  * @version 1.0
  * 2019.04.18
  */
-public class ShiroUtil {
+public class ShiroUtils {
 
     // 获取随机盐值
     public static String getSalt() {

@@ -1,7 +1,9 @@
 package com.notalent.bookstore.pojo.user;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -12,7 +14,10 @@ import java.util.Date;
  */
 
 @Data
-public class UserInfo {
+@NoArgsConstructor
+public class UserInfo implements Serializable {
+
+    private static final long serialVersionUID = 3913083570663658513L;
 
     private Integer userInfoId;     // 用户信息id
 
@@ -31,5 +36,10 @@ public class UserInfo {
     private Date updateTime;        // 更新时间
 
     private UserDetail userDetail;  // 用户详情
+
+    public UserInfo(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
 }

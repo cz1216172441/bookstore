@@ -2,6 +2,7 @@ package com.notalent.bookstore.pojo.manager;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,9 @@ import java.util.Date;
  * 2019.04.18
  */
 @Data
-public class ManagerRole {
+public class ManagerRole implements Serializable {
+
+    private static final long serialVersionUID = 200425367114039189L;
 
     private Integer managerId;  // 管理员id
 
