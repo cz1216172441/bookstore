@@ -1,18 +1,12 @@
 package com.notalent.bookstore.interceptor;
 
-import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.notalent.bookstore.jwt.CrossTokenValidation;
 import com.notalent.bookstore.jwt.JwtUtils;
 import com.notalent.bookstore.jwt.TokenValidation;
 import com.notalent.bookstore.pojo.user.UserInfo;
-import com.notalent.bookstore.service.UserService;
-import com.notalent.bookstore.util.IntegerUtils;
-import jdk.nashorn.internal.parser.Token;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -28,9 +22,6 @@ import java.lang.reflect.Method;
  * 2019.05.16
  */
 public class AuthenticationInterceptor implements HandlerInterceptor {
-
-    @Autowired
-    private UserService userService;
 
     @Resource
     private RedisTemplate redisTemplate;
@@ -64,11 +55,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                     throw new RuntimeException("用户不存在，请重新登录");
                 }
                 try {
-                    JwtUtils.verify(userInfo, token);
+                    return JwtUtils.verify(userInfo, token);
                 } catch (JWTVerificationException exception) {
                     throw new RuntimeException("401");
                 }
-                return true;
             }
         }
         return false;

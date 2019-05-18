@@ -2,6 +2,7 @@ package com.notalent.bookstore.pojo.user;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,6 +16,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
+@ToString
 public class UserDetail implements Serializable {
 
     private static final long serialVersionUID = 8646581942676218776L;

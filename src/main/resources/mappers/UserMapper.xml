@@ -30,6 +30,11 @@
         </association>
     </resultMap>
 
+    <sql id="userCols">
+        ui.user_info_id, username, user_phone, user_email, user_detail_id, user_img, user_nickname,
+        user_gender, user_birthday
+    </sql>
+
     <!-- 添加用户信息 -->
     <insert id="addUserInfo" parameterType="com.notalent.bookstore.pojo.user.UserInfo"
             useGeneratedKeys="true" keyProperty="userInfoId">
@@ -52,12 +57,67 @@
         select user_info_id, password, salt from user_info where username = #{username} limit 1
     </select>
 
+    <!-- 获取用户所有信息 -->
+    <select id="getUserAllInfo" parameterType="java.lang.Integer" resultMap="userMap">
+        <if test="userInfoId != null">
+            select <include refid="userCols" />
+            from user_info ui
+            left join
+                user_detail ud
+            on ui.user_info_id = ud.user_info_id
+            and ui.user_info_id = #{userInfoId}
+            limit 1
+        </if>
+    </select>
+
     <!-- 修改密码 -->
-    <update id="alterPassword" parameterType="com.notalent.bookstore.pojo.user.UserInfo">
-        update user_info
-        set password = #{password}, salt = #{salt}
-        where username = #{username}
-        limit 1
+    <update id="updateUserInfo" parameterType="com.notalent.bookstore.pojo.user.UserInfo">
+        <if test="userInfoId != null">
+            update
+                user_info
+            <set>
+                <if test="password != null and password != ''">
+                    password = #{password},
+                </if>
+                <if test="salt != null and salt != ''">
+                    salt = #{salt},
+                </if>
+                <if test="userPhone != null and userPhone != ''">
+                    user_phone = #{userPhone},
+                </if>
+                <if test="userEmail != null and userEmail != ''">
+                    user_email = #{userEmail}
+                </if>
+            </set>
+            where
+                user_info_id = #{userInfoId}
+            limit 1
+        </if>
+    </update>
+
+    <!-- 更新用户详情 -->
+    <update id="updateUserDetail" parameterType="com.notalent.bookstore.pojo.user.UserDetail">
+        <if test="userInfoId != null">
+            update
+                user_detail
+            <set>
+                <if test="userImg != null and userImg != ''">
+                    user_img = #{userImg},
+                </if>
+                <if test="userNickname != null and userNickname != ''">
+                    user_nickname = #{userNickname},
+                </if>
+                <if test="userGender != null and userGender != ''">
+                    user_gender = #{userGender},
+                </if>
+                <if test="userBirthday != null">
+                    user_birthday = #{userBirthday}
+                </if>
+            </set>
+            where
+                user_info_id = #{userInfoId}
+            limit 1
+        </if>
     </update>
 
 

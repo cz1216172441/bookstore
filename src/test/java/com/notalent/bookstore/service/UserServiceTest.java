@@ -2,6 +2,8 @@ package com.notalent.bookstore.service;
 
 import com.notalent.bookstore.BookstoreApplication;
 import com.notalent.bookstore.jwt.JwtUtils;
+import com.notalent.bookstore.mapper.UserMapper;
+import com.notalent.bookstore.pojo.user.UserDetail;
 import com.notalent.bookstore.pojo.user.UserInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
@@ -15,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 import java.time.Duration;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @RunWith(SpringRunner.class)
@@ -23,6 +26,9 @@ public class UserServiceTest {
 
     @Autowired
     private UserService userService;
+
+    @Resource
+    private UserMapper userMapper;
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -68,7 +74,7 @@ public class UserServiceTest {
         UserInfo ui = new UserInfo();
         ui.setUsername("user1");
         ui.setPassword("123456");
-        int res = userService.alterPassword(ui);
+        int res = userService.updatePassword(ui);
         Assert.assertEquals(1, res);
     }
 
@@ -77,10 +83,32 @@ public class UserServiceTest {
         UserInfo ui = new UserInfo("user1", "123456");
         ui.setUserInfoId(1);
 //        String token = JwtUtils.getToken(ui);
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTU1Nzk0NTUwMywidXNlciI6MX0.K88UMNNggbjSyVzl8yIiDINo5YwfQqunRYVedBL3CwY";
-        redisTemplate.opsForValue().set(token, ui, 60 * 1000, TimeUnit.SECONDS);
-        System.err.println(token);
+        // 19:30
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTU1ODE4Mjc4NSwidXNlciI6MX0.mPOBb7Rniym2V3cGBlhPAQZqlVQsV4LKP4PJzEPSAn0";
+//        redisTemplate.opsForValue().set(token, ui, 60 * 1000, TimeUnit.SECONDS);
+//        System.err.println(token);
         System.out.println(JwtUtils.getUserInfoId(token));
-        JwtUtils.verify((UserInfo)redisTemplate.opsForValue().get(token), token);
+        System.out.println(((UserInfo)redisTemplate.opsForValue().get(token)).toString());
+        Assert.assertEquals(true, JwtUtils.verify((UserInfo)redisTemplate.opsForValue().get(token), token));
     }
+
+    @Test
+    public void getUserAllInfo() {
+        Integer userInfoId = 1;
+        UserInfo ui = userService.getUserAllInfo(userInfoId);
+        System.out.println(ui.toString());
+    }
+
+    @Test
+    public void updateUserDetail() {
+        UserDetail ud = new UserDetail();
+        ud.setUserInfoId(1);
+        ud.setUserNickname("nick1");
+        ud.setUserGender("男");
+        ud.setUserBirthday(new Date());
+        int res = userService.updateUserDetail(ud);
+        Assert.assertEquals(1, res);
+    }
+
+
 }

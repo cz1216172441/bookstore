@@ -1,0 +1,50 @@
+spring:
+  ## 数据库配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/bookstore?characterEncoding=utf-8&serverTimezone=UTC
+    username: root
+    password: 123456
+
+  ## Thymeleaf
+  thymeleaf:
+    cache: false
+
+  ## Redis
+  redis:
+    jedis:
+      pool:
+        min-idle: 5
+        max-idle: 10
+        max-active: 10
+        max-wait: 2000
+    database: 0
+    port: 6379
+    host: localhost
+    password:
+    timeout: 2000
+
+  ## 缓存
+  cache:
+    type: REDIS
+    cache-names: redisCache
+
+  ## 文件上传
+  servlet:
+    multipart:
+      location: /static/upload/**
+      max-file-size: 2MB
+      max-request-size: 2MB
+      enabled: true
+  mvc:
+    static-path-pattern: /static/upload/**
+
+## MyBatis
+mybatis:
+  mapper-locations: mappers/*.xml
+  type-aliases-package: com.notalent.bookstore.pojo
+
+## 日志
+logging:
+  level:
+    com.notalent.bookstore.mapper: DEBUG

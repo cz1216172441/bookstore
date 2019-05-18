@@ -2,6 +2,7 @@ package com.notalent.bookstore.pojo.user;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,6 +16,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
+@ToString
 public class UserInfo implements Serializable {
 
     private static final long serialVersionUID = 3913083570663658513L;
@@ -36,6 +38,11 @@ public class UserInfo implements Serializable {
     private Date updateTime;        // 更新时间
 
     private UserDetail userDetail;  // 用户详情
+
+    public UserInfo(Integer userInfoId, String password) {
+        this.userInfoId = userInfoId;
+        this.password = password;
+    }
 
     public UserInfo(String username, String password) {
         this.username = username;

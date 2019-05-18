@@ -5,11 +5,15 @@ import com.notalent.bookstore.pojo.user.UserDetail;
 import com.notalent.bookstore.pojo.user.UserInfo;
 import com.notalent.bookstore.service.UserService;
 import com.notalent.bookstore.shiro.ShiroUtils;
+import com.notalent.bookstore.util.FileUtils;
 import com.notalent.bookstore.util.IntegerUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 
 /**
  * 用户服务层实现
@@ -50,14 +54,46 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer alterPassword(UserInfo userInfo) {
+    public Integer updatePassword(UserInfo userInfo) {
         userInfo.setSalt(ShiroUtils.getSalt());
         userInfo.setPassword(ShiroUtils.encrypt(userInfo.getPassword(), userInfo.getSalt()));
-        return userMapper.alterPassword(userInfo);
+        return userMapper.updateUserInfo(userInfo);
+    }
+
+    @Override
+    public Integer updateUserInfo(UserInfo userInfo) {
+        return userMapper.updateUserInfo(userInfo);
+    }
+
+    @Override
+    public Integer updateUserDetail(UserDetail userDetail) {
+        return userMapper.updateUserDetail(userDetail);
     }
 
     @Override
     public UserInfo getUserInfoById(Integer userInfoId) {
         return userMapper.getUserInfoById(userInfoId);
+    }
+
+    @Override
+    public UserInfo getUserAllInfo(Integer userInfoId) {
+        return userMapper.getUserAllInfo(userInfoId);
+    }
+
+    @Override
+    @Transactional
+    public Integer uploadHeadPortrait(MultipartFile file, Integer userInfoId) throws IOException {
+        // 上传头像
+        String fileName = FileUtils.uploadFile(file, FileUtils.FILE_URL + FileUtils.USER_UPLOAD_URL);
+        // 删除旧头像
+        UserInfo ui = userMapper.getUserAllInfo(userInfoId);
+        String userImg = ui.getUserDetail().getUserImg();
+        if (StringUtils.isNotEmpty(userImg)) {
+            FileUtils.deleteFile(userImg, FileUtils.FILE_URL + FileUtils.USER_UPLOAD_URL);
+        }
+        UserDetail ud = new UserDetail();
+        ud.setUserInfoId(userInfoId);
+        ud.setUserImg(fileName);
+        return userMapper.updateUserDetail(ud);
     }
 }

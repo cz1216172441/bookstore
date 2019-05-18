@@ -28,7 +28,7 @@ public class JwtUtils {
     public static final String ISSUER = "auth0";
 
     // token 用户id
-    public static final String USER_ID = "user";
+    public static final String USER_ID = "upload";
 
     // 获取令牌
     public static String getToken(UserInfo ui) {
@@ -45,21 +45,26 @@ public class JwtUtils {
     }
 
     // 验证令牌
-    public static void verify(UserInfo ui, String token) throws Exception {
+    public static boolean verify(UserInfo ui, String token) {
         JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(ui.getPassword()))
                 .withClaim(USER_ID, ui.getUserInfoId())
                 .build();
         try {
-            // 验证不通过则抛出异常
             jwtVerifier.verify(token);
+            return true;
         } catch (JWTVerificationException exception) {
-            throw new Exception("token已过期");
+            return false;
         }
     }
 
     // 获取令牌中的用户id
-    public static Integer getUserInfoId(String token) throws Exception {
+    public static Integer getUserInfoId(String token) throws JWTDecodeException {
         return JWT.decode(token).getClaim(USER_ID).asInt();
+    }
+
+    // 获取token过期时间
+    public static Date getExpires(String token) throws JWTDecodeException {
+        return JWT.decode(token).getExpiresAt();
     }
 
 }

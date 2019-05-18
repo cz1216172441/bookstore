@@ -3,6 +3,7 @@ package com.notalent.bookstore.mapper;
 import com.notalent.bookstore.pojo.user.UserDetail;
 import com.notalent.bookstore.pojo.user.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 用户mapper层
@@ -25,7 +26,13 @@ public interface UserMapper {
     // 根据用户信息id 获取用户信息
     UserInfo getUserInfoById(Integer userInfoId);
 
-    // 修改密码
-    Integer alterPassword(UserInfo userInfo);
+    // 根据用户信息id获取用户所有信息
+    UserInfo getUserAllInfo(@Param("userInfoId") Integer userInfoId);
+
+    // 修改用户信息
+    Integer updateUserInfo(UserInfo userInfo);
+
+    // 修改用户详情信息
+    Integer updateUserDetail(UserDetail userDetail);
 
 }
