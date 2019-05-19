@@ -271,3 +271,218 @@ API文档
 }
 ```
 
+<hr/> 
+
+### Address Module 地址模块
+
+**API列表**
+
+* /address/api/v1/address/add **添加地址**
+* /address/api/v1/address/update **修改地址信息**
+* /address/api/v1/address/list **获取地址列表**
+* /address/api/v1/address/get **获取地址信息**
+* /address/api/v1/address/delete **删除地址**
+
+<hr/>
+
+**/address/api/v1/address/add**
+
+**添加地址**
+
+**方法：POST**
+
+**请求参数**
+
+| 参数名        | 必选 | 类型    | 描述           |
+| ------------- | ---- | ------- | -------------- |
+| receiverName  | 是   | String  | 收货人姓名     |
+| receiverPhone | 是   | String  | 收货人手机号码 |
+| postalCode    | 是   | String  | 邮政编码       |
+| areaId        | 是   | Integer | 地区id         |
+| addressDetail | 是   | String  | 收货详细地址   |
+| addressStatus | 是   | Boolean | 是否默认为地址 |
+
+**Header**
+
+| 参数名 | 必选 | 类型   | 描述 |
+| ------ | ---- | ------ | ---- |
+| Token  | 是   | String | 令牌 |
+
+**响应**
+
+```javascript
+{
+    "code": 0,
+    "msg": "ok",
+    "data": {}
+}
+```
+
+<hr/>
+
+**/address/api/v1/address/update**
+
+**修改地址信息**
+
+**方法：POST**
+
+**请求参数**
+
+| 参数名        | 必选 | 类型    | 描述           |
+| ------------- | ---- | ------- | -------------- |
+| receiverName  | 否   | String  | 收货人姓名     |
+| receiverPhone | 否   | String  | 收货人手机号码 |
+| postalCode    | 否   | String  | 邮政编码       |
+| areaId        | 否   | Integer | 地区id         |
+| addressDetail | 否   | String  | 收货详细地址   |
+| addressStatus | 否   | Boolean | 是否默认为地址 |
+
+**Header**
+
+| 参数名 | 必选 | 类型   | 描述 |
+| ------ | ---- | ------ | ---- |
+| Token  | 是   | String | 令牌 |
+
+**响应**
+
+```javascript
+{
+    "code": 0,
+    "msg": "ok",
+    "data": {}
+}
+```
+
+<hr/>
+
+**/address/api/v1/address/list**
+
+**获取地址列表**
+
+**方法：GET**
+
+**请求参数**
+
+| 参数名   | 必选 | 类型    | 描述 |
+| -------- | ---- | ------- | ---- |
+| pageNum  | 是   | Integer | 页码 |
+| pageSize | 是   | Integer | 数目 |
+
+**Header**
+
+| 参数名 | 必选 | 类型   | 描述 |
+| ------ | ---- | ------ | ---- |
+| Token  | 是   | String | 令牌 |
+
+**响应**
+
+```javascript
+{
+    "code": 0,
+    "msg": "ok",
+    "data": [
+        {
+            "id": 1,							// 收货地址id
+            "name": "陈先生",					  // 收货人姓名
+            "phone": "13112341234",             // 收货人手机号码
+            "code": "000001",                   // 邮政编码
+            "areaId": 440404,                   // 地区id
+            "area": "广东省珠海市金湾区",          // 地区
+            "address": "三灶镇吉林大学珠海学院",    // 详细地址
+            "default": false                    // 是否默认地址
+        },
+        {
+            "id": 2,
+            "name": "陈先生",
+            "phone": "13100000000",
+            "code": "000000",
+            "areaId": 710448,
+            "area": "台湾省台中市清水区",
+            "address": "123456789",
+            "default": false
+        },
+        {
+            "id": 3,
+            "name": "Mr.no",
+            "phone": "13112341232",
+            "code": "111719",
+            "areaId": 710449,
+            "area": "台湾省台中市大甲区",
+            "address": "111",
+            "default": false
+        }
+	]
+}
+```
+
+<hr/>
+
+**/address/api/v1/address/get**
+
+**获取某个地址**
+
+**方法：GET**
+
+**请求参数**
+
+| 参数名            | 必选 | 类型    | 描述       |
+| ----------------- | ---- | ------- | ---------- |
+| receiverAddressId | 是   | Integer | 收货地址id |
+
+**Header**
+
+| 参数名 | 必选 | 类型   | 描述 |
+| ------ | ---- | ------ | ---- |
+| Token  | 是   | String | 令牌 |
+
+**响应**
+
+```javascript
+{
+    "code": 0,
+    "msg": "ok",
+    "data": {
+        "id": 1,
+        "name": "陈先生",
+        "phone": "13112341234",
+        "code": "000001",
+        "areaId": 440404,
+        "area": "广东省珠海市金湾区",
+        "address": "三灶镇吉林大学珠海学院",
+        "default": false
+    }
+}
+```
+
+<hr/>
+
+**/address/api/v1/address/delete**
+
+**删除地址**
+
+**方法：POST**
+
+**请求参数**
+
+| 参数名            | 必选 | 类型    | 描述       |
+| ----------------- | ---- | ------- | ---------- |
+| receiverAddressId | 是   | Integer | 收货地址id |
+
+**Header**
+
+| 参数名 | 必选 | 类型   | 描述 |
+| ------ | ---- | ------ | ---- |
+| Token  | 是   | String | 令牌 |
+
+**响应**
+
+```javascript
+{
+    "code": 0,
+    "msg": "ok",
+    "data": {}
+}
+```
+
+<hr/>
+

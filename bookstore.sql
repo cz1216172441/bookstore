@@ -185,15 +185,24 @@ create table if not exists receiver_address (
     receiver_name varchar(16) not null default '' comment '收货人姓名',
     receiver_phone varchar(11) not null default '' comment '收货人手机号码',
     postal_code varchar(6) not null default '' comment '邮政编码',
-    province_id int(11) not null comment '省id',
-    city_id int(11) not null comment '市id',
-    county_id int(11) not null comment '区id',
+    area_id int(11) not null comment '地区id',
     address_detail varchar(64) not null default '' comment '详情地址',
+    address_status tinyint(1) not null default 0 comment '地址状态：0 非默认地址， 1 默认地址',
     create_time timestamp not null default current_timestamp comment '创建时间',
     update_time timestamp not null default current_timestamp
         on update current_timestamp comment '更新时间',
     primary key (receiver_address_id),
     key idx_user_info_id_1 (user_info_id)
+);
+
+-- area 地区
+create table if not exists area (
+    area_id int(11) not null comment '地区id',
+    area_name varchar(15) not null default '' comment '地区名',
+    super_area_id int(11) not null default 0 comment '父级地区id',
+    primary key (area_id),
+    key idx_super_area_id (super_area_id),
+    key idx_area_name (area_name)
 );
 
 --

@@ -1,6 +1,7 @@
 package com.notalent.bookstore.pojo.user;
 
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,6 +14,7 @@ import java.util.Date;
  */
 
 @Data
+@ToString
 public class ReceiverAddress implements Serializable {
 
     private static final long serialVersionUID = 6203402493595658039L;
@@ -27,16 +29,16 @@ public class ReceiverAddress implements Serializable {
 
     private String postalCode;          // 邮政编码
 
-    private Integer provinceId;         // 省id
-
-    private Integer cityId;             // 市id
-
-    private Integer countyId;           // 区id
+    private Integer areaId;             // 地区id
 
     private String addressDetail;       // 详细地址
+
+    private Boolean addressStatus;      // 地址状态
 
     private Date createTime;            // 创建时间
 
     private Date updateTime;            // 更新时间
+
+    private Area area;                  // 地区
 
 }

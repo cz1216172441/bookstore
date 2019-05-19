@@ -7,8 +7,6 @@ import com.notalent.bookstore.jwt.TokenValidation;
 import com.notalent.bookstore.pojo.user.UserDetail;
 import com.notalent.bookstore.pojo.user.UserInfo;
 import com.notalent.bookstore.service.UserService;
-import com.notalent.bookstore.storage.StorageService;
-import com.notalent.bookstore.util.FileUtils;
 import com.notalent.bookstore.util.UserUtils;
 import com.notalent.bookstore.util.IntegerUtils;
 import com.notalent.bookstore.util.Result;
@@ -16,10 +14,8 @@ import com.notalent.bookstore.util.Result;
 import com.notalent.bookstore.vo.UserVO;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,9 +37,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private StorageService storageService;
 
     @Resource
     private RedisTemplate redisTemplate;
@@ -143,7 +136,7 @@ public class UserController {
     @GetMapping("/v1/user/info")
     @TokenValidation
     public Result getUserAllInfo(HttpServletRequest request) throws JWTDecodeException {
-        Integer userInfoId = getUserInfoId(request);
+        Integer userInfoId = JwtUtils.getUserInfoId(request);
         if (IntegerUtils.isNotEmpty(userInfoId)) {
             UserInfo ui = userService.getUserAllInfo(userInfoId);
             if (ui != null) {
@@ -166,7 +159,7 @@ public class UserController {
     public Result updateUserDetail(UserDetail userDetail,
                                    HttpServletRequest request) throws JWTDecodeException {
         if (userDetail != null) {
-            userDetail.setUserInfoId(getUserInfoId(request));
+            userDetail.setUserInfoId(JwtUtils.getUserInfoId(request));
             // 性别是否合法
             String gender = userDetail.getUserGender();
             if (StringUtils.isNotEmpty(gender) && UserUtils.isGenderError(gender)) {
@@ -197,7 +190,7 @@ public class UserController {
     public Result updateUserInfo(UserInfo userInfo,
                                  HttpServletRequest request) throws JWTDecodeException {
         if (userInfo != null) {
-            userInfo.setUserInfoId(getUserInfoId(request));
+            userInfo.setUserInfoId(JwtUtils.getUserInfoId(request));
             // 电话号码和电子邮箱是否规范
             String phone = userInfo.getUserPhone();
             String email = userInfo.getUserEmail();
@@ -229,21 +222,11 @@ public class UserController {
     public Result uploadHeadPortrait(@RequestParam("file") MultipartFile file,
                                      HttpServletRequest request) throws IOException {
         System.err.println(file);
-        Integer userInfoId = getUserInfoId(request);
+        Integer userInfoId = JwtUtils.getUserInfoId(request);
         if (IntegerUtils.isNotError(userService.uploadHeadPortrait(file, userInfoId))) {
             return Result.success();
         }
         return Result.error();
-    }
-
-    /**
-     * 获取用户信息id
-     * @param request 请  求
-     * @return userInfoId
-     * @throws JWTDecodeException
-     */
-    public Integer getUserInfoId(HttpServletRequest request) throws JWTDecodeException {
-        return JwtUtils.getUserInfoId(request.getHeader("Token"));
     }
 
 }

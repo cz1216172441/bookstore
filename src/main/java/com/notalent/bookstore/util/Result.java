@@ -1,5 +1,6 @@
 package com.notalent.bookstore.util;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -50,6 +51,10 @@ public class Result {
 
     public static Result error(Object obj) {
         return new Result(ERROR_CODE, ERROR_MSG, obj);
+    }
+
+    public static String errorJson() {
+        return JSON.toJSONString(error());
     }
 
 }

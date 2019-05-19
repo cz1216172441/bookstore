@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- AddressMapper.xml
+     create by noTalent
+     2019.05.19 -->
+<mapper namespace="com.notalent.bookstore.mapper.AddressMapper">
+
+    <!-- addressMap -->
+    <resultMap id="addressMap" type="com.notalent.bookstore.pojo.user.ReceiverAddress">
+        <id column="receiver_address_id" property="receiverAddressId" />
+        <result column="user_info_id" property="userInfoId" />
+        <result column="receiver_name" property="receiverName" />
+        <result column="receiver_phone" property="receiverPhone" />
+        <result column="postal_code" property="postalCode" />
+        <result column="area_id" property="areaId" />
+        <result column="address_detail" property="addressDetail" />
+        <result column="address_status" property="addressStatus" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <association property="area" javaType="com.notalent.bookstore.pojo.user.Area">
+            <id column="area_id" property="areaId" />
+            <result column="area_name" property="areaName" />
+            <result column="super_area_id" property="superAreaId" />
+        </association>
+    </resultMap>
+
+    <!-- areaMap -->
+    <resultMap id="areaMap" type="com.notalent.bookstore.pojo.user.Area">
+        <id column="area_id" property="areaId" />
+        <result column="area_name" property="areaName" />
+        <result column="super_area_id" property="superAreaId" />
+    </resultMap>
+
+    <!-- 添加地址 -->
+    <insert id="addAddress" parameterType="com.notalent.bookstore.pojo.user.ReceiverAddress">
+        insert into
+            receiver_address (user_info_id, receiver_name, receiver_phone, postal_code, area_id, address_detail, address_status)
+        values
+            (#{userInfoId}, #{receiverName}, #{receiverPhone}, #{postalCode}, #{areaId}, #{addressDetail}, #{addressStatus})
+    </insert>
+
+    <!-- 查询地址 -->
+    <select id="getAddressById" parameterType="java.lang.Integer" resultMap="addressMap">
+        select
+            *
+        from
+            receiver_address ra
+        left join
+            area a
+        on
+            ra.area_id = a.area_id
+        where
+            receiver_address_id = #{receiverAddressId}
+        limit 1
+    </select>
+
+    <!-- 查询地区 -->
+    <select id="getAreaById" parameterType="java.lang.Integer" resultMap="areaMap">
+        select * from area where area_id = #{areaId} limit 1
+    </select>
+
+    <!-- 获取用户信息id为userInfoId地址列表 -->
+    <select id="listAddresses" parameterType="java.lang.Integer" resultMap="addressMap">
+        select
+            *
+        from
+            receiver_address ra
+        left join
+            area a
+        on
+            ra.area_id = a.area_id
+        where
+            user_info_id = #{userInfoId}
+    </select>
+
+    <!-- 修改地址 -->
+    <update id="updateAddress" parameterType="com.notalent.bookstore.pojo.user.ReceiverAddress">
+        <if test="receiverAddressId != null">
+            update
+                receiver_address
+            <set>
+                <if test="receiverName != null and receiverName != ''">
+                    receiver_name = #{receiverName},
+                </if>
+                <if test="receiverPhone != null and receiverPhone != ''">
+                    receiver_phone = #{receiverPhone},
+                </if>
+                <if test="postalCode != null and postalCode != ''">
+                    postal_code = #{postalCode},
+                </if>
+                <if test="areaId != null">
+                    area_id = #{areaId},
+                </if>
+                <if test="addressDetail != null and addressDetail != ''">
+                    address_detail = #{addressDetail},
+                </if>
+                <if test="addressStatus != null">
+                    address_status = #{addressStatus}
+                </if>
+            </set>
+            where
+                receiver_address_id = #{receiverAddressId}
+            limit 1
+        </if>
+    </update>
+
+    <!-- 删除收货地址 -->
+    <delete id="deleteAddress" parameterType="java.lang.Integer">
+        delete from
+            receiver_address
+        where
+            receiver_address_id = #{receiverAddressId}
+    </delete>
+
+</mapper>

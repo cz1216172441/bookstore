@@ -10,6 +10,7 @@ import com.sun.istack.internal.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Options;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
@@ -65,6 +66,11 @@ public class JwtUtils {
     // 获取token过期时间
     public static Date getExpires(String token) throws JWTDecodeException {
         return JWT.decode(token).getExpiresAt();
+    }
+
+    // 获取id
+    public static Integer getUserInfoId(HttpServletRequest request) throws JWTDecodeException {
+        return getUserInfoId(request.getHeader("Token"));
     }
 
 }
