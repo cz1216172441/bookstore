@@ -486,3 +486,52 @@ API文档
 
 <hr/>
 
+### Book Module 图书模块
+
+**API列表**
+
+* /book/api/v1/book/get **获取图书信息**
+
+<hr/>
+
+**/book/api/v1/book/get**
+
+**获取图书信息**
+
+**方法：GET**
+
+**请求参数**
+
+| 参数名     | 必选 | 类型    | 描述       |
+| ---------- | ---- | ------- | ---------- |
+| bookInfoId | 是   | Integer | 图书信息id |
+
+**Header**
+
+无
+
+**响应**
+
+```javascript
+{
+	"code": 0,
+	"msg": "ok",
+	"data": {
+		"id": 1,									 // 图书id
+        "category": "小说/中国当代小说",				// 图书分类
+        "name": "人生海海",                            // 图书名称
+        "author": "麦家",                             // 图书作者
+        "intro": "人生海海，何必在意一时沉浮！",          // 图书简介
+        "publisher": "北京十月文艺出版社",              // 出版社
+        "pubDate": "2019-05",                        // 出版时间
+        "isbn": "9787530219218",                     // ISBN
+        "actualPrice": "53.90",						 // 实际价格
+        "originalPrice": "55.00",					 // 原价
+        "stock": 1000,								 // 库存
+        "status": false,							 // 上架状态
+        "infoImg": "",							     // 图书封面
+        "detailImg": ""								 // 图书详情
+	}
+}
+```
+

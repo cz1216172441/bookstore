@@ -221,7 +221,6 @@ public class UserController {
     @TokenValidation
     public Result uploadHeadPortrait(@RequestParam("file") MultipartFile file,
                                      HttpServletRequest request) throws IOException {
-        System.err.println(file);
         Integer userInfoId = JwtUtils.getUserInfoId(request);
         if (IntegerUtils.isNotError(userService.uploadHeadPortrait(file, userInfoId))) {
             return Result.success();

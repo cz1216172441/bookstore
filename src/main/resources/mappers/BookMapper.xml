@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- BookMapper.xml
+     create by noTalent
+     2019.05.20 -->
+<mapper namespace="com.notalent.bookstore.mapper.BookMapper">
+
+    <!-- bookMap -->
+    <resultMap id="bookMap" type="com.notalent.bookstore.pojo.book.BookInfo">
+        <id column="book_info_id" property="bookInfoId" />
+        <result column="category_id" property="categoryId" />
+        <result column="book_info_img" property="bookInfoImg" />
+        <result column="book_name" property="bookName" />
+        <result column="book_author" property="bookAuthor" />
+        <result column="book_actual_price" property="bookActualPrice" javaType="java.math.BigDecimal" />
+        <result column="book_original_price" property="bookOriginalPrice" javaType="java.math.BigDecimal" />
+        <result column="book_status" property="bookStatus" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <association resultMap="bookDetailMap" property="bookDetail" javaType="com.notalent.bookstore.pojo.book.BookDetail"></association>
+        <association resultMap="bookCategoryMap" property="bookCategory" javaType="com.notalent.bookstore.pojo.book.BookCategory"></association>
+        <association resultMap="bookSkuMap" property="bookSku" javaType="com.notalent.bookstore.pojo.book.BookSku"></association>
+    </resultMap>
+
+    <!-- bookDetailMap -->
+    <resultMap id="bookDetailMap" type="com.notalent.bookstore.pojo.book.BookDetail">
+        <id column="book_detail_id" property="bookDetailId" />
+        <result column="book_info_id" property="bookInfoId" />
+        <result column="book_intro" property="bookIntro" />
+        <result column="publishing_house" property="publishingHouse" />
+        <result column="publishing_time" property="publishingTime" />
+        <result column="book_isbn" property="bookIsbn" />
+        <result column="book_detail_img" property="bookDetailImg" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- bookCategoryMap -->
+    <resultMap id="bookCategoryMap" type="com.notalent.bookstore.pojo.book.BookCategory">
+        <id column="category_id" property="categoryId" />
+        <result column="super_category_id" property="superCategoryId" />
+        <result column="category_name" property="categoryName" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- bookSkuMap -->
+    <resultMap id="bookSkuMap" type="com.notalent.bookstore.pojo.book.BookSku">
+        <id column="book_sku_id" property="bookSkuId" />
+        <result column="book_info_id" property="bookInfoId" />
+        <result column="book_stock" property="bookStock" />
+        <result column="book_sku_property" property="bookSkuProperty" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+    
+    <!-- 添加图书信息 -->
+    <insert id="addBookInfo" parameterType="com.notalent.bookstore.pojo.book.BookInfo"
+            useGeneratedKeys="true" keyProperty="bookInfoId">
+        insert into
+            book_info(category_id, book_info_img, book_name, book_author, book_actual_price, book_original_price, book_status)
+        values
+            (#{categoryId}, #{bookInfoImg}, #{bookName}, #{bookAuthor}, #{bookActualPrice}, #{bookOriginalPrice}, #{bookStatus})
+    </insert>
+
+    <!-- 添加图书详情 -->
+    <insert id="addBookDetail" parameterType="com.notalent.bookstore.pojo.book.BookDetail">
+        insert into
+            book_detail(book_info_id, book_intro, publishing_house, publishing_time, book_isbn, book_detail_img)
+        values
+            (#{bookInfoId}, #{bookIntro}, #{publishingHouse}, #{publishingTime}, #{bookIsbn}, #{bookDetailImg})
+    </insert>
+
+    <!-- 添加图书分类 -->
+    <insert id="addBookCategory" parameterType="com.notalent.bookstore.pojo.book.BookCategory">
+        insert into
+            book_category(super_category_id, category_name)
+        values
+            (#{superCategoryId}, #{categoryName})
+    </insert>
+
+    <!-- 添加图书库存 -->
+    <insert id="addBookSku" parameterType="com.notalent.bookstore.pojo.book.BookSku">
+        insert into
+            book_sku(book_info_id, book_stock)
+        values
+            (#{bookInfoId}, #{bookStock})
+    </insert>
+
+    <!-- 查询图书 -->
+    <select id="getBookById" parameterType="java.lang.Integer" resultMap="bookMap">
+        select
+            *
+        from
+            book_info bi
+        left join
+            book_category bc
+        on
+            bi.category_id = bc.category_id
+        left join
+            book_detail bd
+        on
+            bi.book_info_id = bd.book_info_id
+        left join
+            book_sku bs
+        on
+            bi.book_info_id = bs.book_info_id
+        where
+            bi.book_info_id = #{bookInfoId}
+        limit 1
+    </select>
+
+    <!-- 查询图书分类 -->
+    <select id="getCategoryById" parameterType="java.lang.Integer" resultMap="bookCategoryMap">
+        select * from book_category where category_id = #{categoryId} limit 1
+    </select>
+
+    <!-- 更新图书信息 -->
+    <update id="updateBookInfo" parameterType="com.notalent.bookstore.pojo.book.BookInfo">
+        <if test="bookInfoId != null">
+            update
+                book_info
+            <set>
+                <if test="categoryId != null">
+                    category_id = #{categoryId},
+                </if>
+                <if test="bookInfoImg != null and bookInfoImg != ''">
+                    book_info_img = #{bookInfoImg},
+                </if>
+                <if test="bookName != null and bookName != ''">
+                    book_name = #{bookName},
+                </if>
+                <if test="bookAuthor != null and bookAuthor != ''">
+                    book_author = #{bookAuthor},
+                </if>
+                <if test="bookActualPrice != null">
+                    book_actual_price = #{bookActualPrice},
+                </if>
+                <if test="bookOriginalPrice != null">
+                    book_original_price = #{bookOriginalPrice},
+                </if>
+                <if test="bookStatus != null">
+                    book_status = #{bookStatus}
+                </if>
+            </set>
+            where
+                book_info_id = #{bookInfoId}
+            limit 1
+        </if>
+    </update>
+
+    <!-- 更新图书详情 -->
+    <update id="updateBookDetail" parameterType="com.notalent.bookstore.pojo.book.BookDetail">
+        <if test="bookDetailId != null">
+            update
+                book_detail
+            <set>
+                <if test="bookInfoId != null">
+                    book_info_id = #{bookInfoId},
+                </if>
+                <if test="bookIntro != null and bookIntro != ''">
+                    book_intro = #{bookIntro},
+                </if>
+                <if test="publishingHouse != null">
+                    publishing_house = #{publishingHouse},
+                </if>
+                <if test="publishingTime != null">
+                    publishing_time = #{publishingTime},
+                </if>
+                <if test="bookIsbn != null and bookIsbn != ''">
+                    book_isbn = #{bookIsbn},
+                </if>
+                <if test="bookDetailImg != null and bookDetailImg != ''">
+                    book_detail_img = #{bookDetailImg}
+                </if>
+            </set>
+            where
+                book_detail_id = #{bookDetailId}
+            limit 1
+        </if>
+    </update>
+
+    <!-- 更新图书分类 -->
+    <update id="updateBookCategory" parameterType="com.notalent.bookstore.pojo.book.BookCategory">
+        <if test="categoryId != null">
+            update
+                book_category
+            <set>
+                <if test="superCategoryId != null">
+                    super_category_id = #{superCategoryId},
+                </if>
+                <if test="categoryName != null and categoryName != ''">
+                    category_name = #{categoryName}
+                </if>
+            </set>
+            where
+                category_id = #{categoryId}
+            limit 1
+        </if>
+    </update>
+
+    <!-- 更新图书库存 -->
+    <update id="updateBookSku" parameterType="com.notalent.bookstore.pojo.book.BookSku">
+        <if test="bookSkuId != null">
+            update
+                book_sku
+            <set>
+                <if test="bookInfoId != null">
+                    book_info_id = #{bookInfoId},
+                </if>
+                <if test="bookStock != null">
+                    book_stock = #{bookStock}
+                </if>
+            </set>
+            where
+                book_sku_id = #{bookSkuId}
+            limit 1
+        </if>
+    </update>
+
+</mapper>

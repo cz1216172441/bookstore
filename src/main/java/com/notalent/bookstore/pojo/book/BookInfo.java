@@ -2,6 +2,7 @@ package com.notalent.bookstore.pojo.book;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -14,6 +15,7 @@ import java.util.Date;
  * 2019.05.12
  */
 @Data
+@ToString
 @NoArgsConstructor
 public class BookInfo implements Serializable {
 
@@ -33,7 +35,7 @@ public class BookInfo implements Serializable {
 
     private BigDecimal bookOriginalPrice;  // 图书原价
 
-    private Boolean bookStatue;            // 图书状态
+    private Boolean bookStatus;            // 图书状态
 
     private Date createTime;               // 创建时间
 
@@ -44,5 +46,10 @@ public class BookInfo implements Serializable {
     private BookCategory bookCategory;     // 图书分类
 
     private BookSku bookSku;               // 图书库存
+
+    public BookInfo(Integer bookInfoId, String bookInfoImg) {
+        this.bookInfoId = bookInfoId;
+        this.bookInfoImg = bookInfoImg;
+    }
 
 }

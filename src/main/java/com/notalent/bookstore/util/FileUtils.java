@@ -1,5 +1,7 @@
 package com.notalent.bookstore.util;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -16,10 +18,16 @@ public class FileUtils {
 
     public static final String FILE_URL = System.getProperty("user.dir");
 
+    // 服务器路径
+    public static final String ROOT_URL = "http://localhost:8080";
+
+    // 文件访问路径
+    public static final String USER_VISIT_URL = "/static/upload/user/";
+    public static final String BOOK_VISIT_URL = "/static/upload/book/";
+
+    // 文件上传路径
     public static final String UPLOAD_URL = "/src/main/resources/static/upload/";
-
     public static final String USER_UPLOAD_URL = "/src/main/resources/static/upload/user/";
-
     public static final String BOOK_UPLOAD_URL = "/src/main/resources/static/upload/book/";
 
     /**
@@ -64,6 +72,27 @@ public class FileUtils {
     }
 
     /**
+     * 多文件上传
+     * @param files
+     * @param rootPath
+     * @return
+     * @throws IOException
+     */
+    public static String uploadFiles(MultipartFile[] files, String rootPath) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < files.length; i++) {
+            MultipartFile file = files[i];
+            String fileName = FileUtils.uploadFile(file, rootPath);
+            if (i == 0) {
+                builder.append(fileName);
+            } else {
+                builder.append(";" + fileName);
+            }
+        }
+        return builder.toString();
+    }
+
+    /**
      * 删除文件
      * @param filename
      * @return true 删除成功 false 删除失败
@@ -74,6 +103,24 @@ public class FileUtils {
             return file.delete();
         } else {
             return false;
+        }
+    }
+
+    /**
+     * 删除多个文件
+     * @param filenames 文件名
+     * @param deleteUrl 删除路径
+     */
+    public static void deleteFiles(String filenames, String deleteUrl) {
+        if (StringUtils.isNotEmpty(filenames)) {
+            if (filenames.contains(";")) {
+                String[] fileNames = filenames.split(";");
+                for (String fileName : fileNames) {
+                    FileUtils.deleteFile(fileName, deleteUrl);
+                }
+            } else {
+                FileUtils.deleteFile(filenames, deleteUrl);
+            }
         }
     }
 

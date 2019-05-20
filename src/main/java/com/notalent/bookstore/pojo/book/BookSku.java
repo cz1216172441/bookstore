@@ -1,7 +1,9 @@
 package com.notalent.bookstore.pojo.book;
 
+import com.notalent.bookstore.util.IntegerUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,6 +15,7 @@ import java.util.Date;
  * 2019.05.12
  */
 @Data
+@ToString
 @NoArgsConstructor
 public class BookSku implements Serializable {
 
@@ -29,5 +32,10 @@ public class BookSku implements Serializable {
     private Date createTime;         // 创建时间
 
     private Date updateTime;         // 更新时间
+
+    public BookSku(Integer bookInfoId) {
+        this.bookInfoId = bookInfoId;
+        this.bookStock = IntegerUtils.ZERO;
+    }
 
 }

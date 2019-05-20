@@ -3,7 +3,7 @@ package com.notalent.bookstore.service;
 import com.notalent.bookstore.pojo.manager.*;
 
 /**
- * 管理员服务处
+ * 管理员服务层
  * @author noTalent
  * @version 1.0
  * 2019.04.18
