@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
 /**
  * 广告信息实体类
@@ -34,7 +33,5 @@ public class AdvertisementInfo implements Serializable {
     private Date createTime;               // 创建时间
 
     private Date updateTime;               // 更新时间
-
-    private Set<AdvertisementDetail> advertisementDetails;  // 广告详情
 
 }

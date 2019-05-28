@@ -19,16 +19,18 @@ public class FileUtils {
     public static final String FILE_URL = System.getProperty("user.dir");
 
     // 服务器路径
-    public static final String ROOT_URL = "http://localhost:8080";
+    public static final String ROOT_URL = "http://localhost:4000";
 
     // 文件访问路径
     public static final String USER_VISIT_URL = "/static/upload/user/";
     public static final String BOOK_VISIT_URL = "/static/upload/book/";
+    public static final String ADVERTISEMENT_VISIT_URL = "/static/upload/advertisement/";
 
     // 文件上传路径
     public static final String UPLOAD_URL = "/src/main/resources/static/upload/";
     public static final String USER_UPLOAD_URL = "/src/main/resources/static/upload/user/";
     public static final String BOOK_UPLOAD_URL = "/src/main/resources/static/upload/book/";
+    public static final String ADVERTISEMENT_UPLOAD_URL = "/src/main/resources/static/upload/advertisement/";
 
     /**
      * 获取文件名后缀
@@ -122,6 +124,25 @@ public class FileUtils {
                 FileUtils.deleteFile(filenames, deleteUrl);
             }
         }
+    }
+
+    // 图片路径处理
+    public static String imgUrlHandling(String img, String root) {
+        StringBuilder builder = new StringBuilder();
+        if (StringUtils.isEmpty(img)) return builder.toString();
+        if (img.contains(";")) {
+            String[] imgs = img.split(";");
+            for (int i = 0; i < imgs.length; i++) {
+                if (i == 0) {
+                    builder.append(root + imgs[i]);
+                } else {
+                    builder.append(";" + root + imgs[i]);
+                }
+            }
+        } else {
+            builder.append(root + img);
+        }
+        return builder.toString();
     }
 
 }

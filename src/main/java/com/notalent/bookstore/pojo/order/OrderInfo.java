@@ -35,7 +35,7 @@ public class OrderInfo implements Serializable {
 
     private Date finishTime;            // 成交时间
 
-    private Boolean orderStatus;        // 订单状态
+    private Integer orderStatus;        // 订单状态
 
     private Date createTime;            // 创建时间
 

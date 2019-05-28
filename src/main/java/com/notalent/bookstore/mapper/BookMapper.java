@@ -6,6 +6,8 @@ import com.notalent.bookstore.pojo.book.BookInfo;
 import com.notalent.bookstore.pojo.book.BookSku;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * 图书mapper层
  * @author noTalent
@@ -30,8 +32,20 @@ public interface BookMapper {
     // 获取图书
     BookInfo getBookById(Integer bookInfoId);
 
+    // 图书列表（时间降序）
+    List<BookInfo> listBook();
+
+    // 图书列表（按分类）
+    List<BookInfo> listBookByCategory(Integer categoryId);
+
     // 获取图书分类
     BookCategory getCategoryById(Integer categoryId);
+
+    // 获取图书一级分类
+    List<BookCategory> getFirClassCategory();
+
+    // 获取图书二级分类
+    List<BookCategory> getSecClassCategory(Integer superCategoryId);
 
     // 更新图书信息
     Integer updateBookInfo(BookInfo bookInfo);

@@ -1,5 +1,5 @@
 spring:
-  ## Êı¾İ¿âÅäÖÃ
+  ## æ•°æ®åº“
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/bookstore?characterEncoding=utf-8&serverTimezone=UTC
@@ -24,12 +24,12 @@ spring:
     password:
     timeout: 2000
 
-  ## »º´æ
+  ## redis
   cache:
     type: REDIS
     cache-names: redisCache
 
-  ## ÎÄ¼şÉÏ´«
+  ## æ–‡ä»¶ä¸Šä¼ 
   servlet:
     multipart:
       location: /static/upload/**
@@ -44,7 +44,10 @@ mybatis:
   mapper-locations: mappers/*.xml
   type-aliases-package: com.notalent.bookstore.pojo
 
-## ÈÕÖ¾
+## æ—¥å¿—
 logging:
   level:
     com.notalent.bookstore.mapper: DEBUG
+
+server:
+  port: 4000

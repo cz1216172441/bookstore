@@ -89,6 +89,54 @@
             (#{bookInfoId}, #{bookStock})
     </insert>
 
+    <!-- 图书列表（时间降序） -->
+    <select id="listBook" resultMap="bookMap">
+        select
+            *
+        from
+            book_info bi
+                left join
+            book_category bc
+            on
+                bi.category_id = bc.category_id
+                left join
+            book_detail bd
+            on
+                bi.book_info_id = bd.book_info_id
+                left join
+            book_sku bs
+            on
+                bi.book_info_id = bs.book_info_id
+        order by
+            bi.create_time
+        desc
+    </select>
+
+    <!-- 图书列表（图书分类） -->
+    <select id="listBookByCategory" parameterType="java.lang.Integer" resultMap="bookMap">
+        select
+            *
+        from
+            book_info bi
+                left join
+            book_category bc
+            on
+                bi.category_id = bc.category_id
+                left join
+            book_detail bd
+            on
+                bi.book_info_id = bd.book_info_id
+                left join
+            book_sku bs
+            on
+                bi.book_info_id = bs.book_info_id
+        where
+            bi.category_id = #{categoryId}
+        order by
+            bi.create_time
+            desc
+    </select>
+
     <!-- 查询图书 -->
     <select id="getBookById" parameterType="java.lang.Integer" resultMap="bookMap">
         select
@@ -115,6 +163,16 @@
     <!-- 查询图书分类 -->
     <select id="getCategoryById" parameterType="java.lang.Integer" resultMap="bookCategoryMap">
         select * from book_category where category_id = #{categoryId} limit 1
+    </select>
+
+    <!-- 获取图书一级分类列表 -->
+    <select id="getFirClassCategory" resultMap="bookCategoryMap">
+        select * from book_category where super_category_id = 0
+    </select>
+
+    <!-- 根据图书父级id获取图书二级分类列表 -->
+    <select id="getSecClassCategory" parameterType="java.lang.Integer" resultMap="bookCategoryMap">
+        select * from book_category where super_category_id = #{superCategoryId}
     </select>
 
     <!-- 更新图书信息 -->

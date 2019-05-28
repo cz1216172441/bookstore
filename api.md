@@ -491,6 +491,8 @@ API文档
 **API列表**
 
 * /book/api/v1/book/get **获取图书信息**
+* /book/api/v1/fir-category/list **获取图书一级分类列表**
+* /book/api/v1/sec-category/list **获取图书二级分类列表**
 
 <hr/>
 
@@ -532,6 +534,156 @@ API文档
         "infoImg": "",							     // 图书封面
         "detailImg": ""								 // 图书详情
 	}
+}
+```
+
+<hr/>
+
+**/book/api/v1/fir-category/list**
+
+**获取图书一级分类列表**
+
+**方法：GET**
+
+**请求参数**
+
+无
+
+**Header**
+
+无
+
+**响应**
+
+```javascript
+{
+    "code": 0,
+    "msg": "ok",
+    "data": [
+        {
+            "id": 1,			// 图书分类id
+            "name": "小说",	   // 图书分类名
+            "superId": 0		// 父级分类id
+        },
+        {
+            "id": 25,
+            "name": "教材",
+            "superId": 0
+        },
+        {
+            "id": 38,
+            "name": "外语",
+            "superId": 0
+        }
+	]
+}
+```
+
+<hr/>
+
+**/book/api/v1/sec-category/list**
+
+**获取图书二级分类列表**
+
+**方法：GET**
+
+**请求参数**
+
+| 参数名          | 必选 | 类型    | 描述       |
+| --------------- | ---- | ------- | ---------- |
+| superCategoryId | 是   | Integer | 父级分类id |
+
+无
+
+**Header**
+
+无
+
+**响应**
+
+```javascript
+{
+    "code": 0,
+    "msg": "ok",
+    "data": [
+        {
+            "id": 2,
+            "name": "中国当代小说",
+            "superId": 1
+        },
+        {
+            "id": 3,
+            "name": "中国近现代小说",
+            "superId": 1
+        },
+        {
+            "id": 4,
+            "name": "中国古典小说",
+            "superId": 1
+        }
+	]
+}
+```
+
+<hr/>
+
+### Advertisement Module 广告模块
+
+**API列表**
+
+* /advertisement/api/v1/advertisement/list **获取广告列表**
+
+<hr/>
+
+**/advertisement/api/v1/advertisement/list** 
+
+**获取广告列表**
+
+**方法：GET**
+
+**请求参数**
+
+| 参数名   | 必选 | 类型    | 描述 |
+| -------- | ---- | ------- | ---- |
+| pageNum  | 是   | Integer | 页码 |
+| pageSize | 是   | Integer | 数目 |
+
+**Header**
+
+无
+
+**响应**
+
+```javascript
+{
+    "code": 0,
+    "msg": "ok",
+    "data": [
+        {
+        	"id": 3,							// 广告id
+        	"title": "初夏与书为伴",				// 广告标题
+        	"intro": "百万图书，每满100减50",	   // 广告简介
+        	"img": "",							// 广告图片
+            "beginTime": "2019-05-21 04:00:00",	// 开始时间
+            "endTime": "2019-08-19 04:00:00"	// 结束时间
+        },
+        {
+            "id": 1,
+            "title": "520爱读节",
+            "intro": "百万图书，每满100减50",
+            "img": "",
+            "beginTime": "2019-05-19 04:00:00",
+            "endTime": "2019-08-19 04:00:00"
+        },
+        {
+            "id": 2,
+            "title": "儿童礼物节",
+            "intro": "百万图书，每满100减50",
+            "img": "",
+            "beginTime": "2019-05-19 04:00:00",
+            "endTime": "2019-08-19 04:00:00"
+        }
+	]
 }
 ```
 

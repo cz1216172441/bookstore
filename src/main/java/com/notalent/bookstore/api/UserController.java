@@ -7,10 +7,12 @@ import com.notalent.bookstore.jwt.TokenValidation;
 import com.notalent.bookstore.pojo.user.UserDetail;
 import com.notalent.bookstore.pojo.user.UserInfo;
 import com.notalent.bookstore.service.UserService;
+import com.notalent.bookstore.util.FileUtils;
 import com.notalent.bookstore.util.UserUtils;
 import com.notalent.bookstore.util.IntegerUtils;
 import com.notalent.bookstore.util.Result;
 
+import com.notalent.bookstore.vo.TokenVO;
 import com.notalent.bookstore.vo.UserVO;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -33,6 +34,7 @@ import java.util.concurrent.TimeUnit;
  */
 @RestController
 @RequestMapping("/user/api")
+@CrossOrigin("*")
 public class UserController {
 
     @Autowired
@@ -43,33 +45,32 @@ public class UserController {
 
     /**
      * 用户注册
-     * @param userInfo 用户信息
      * @return result
      */
     @PostMapping("/v1/user/register")
-    public Result register(UserInfo userInfo) {
-        if (StringUtils.isBlank(userInfo.getUsername()) || StringUtils.isBlank(userInfo.getPassword())) {
-            return Result.error();
+    @CrossTokenValidation
+    public Result register(@RequestParam("username") String username,
+                           @RequestParam("password") String password) {
+        if (StringUtils.isNotEmpty(username) && StringUtils.isNotEmpty(password)) {
+            Integer res = userService.register(new UserInfo(username, password));
+            if (IntegerUtils.isError(res)) {
+                return Result.error();
+            }
+            return Result.success();
         }
-        Integer res = userService.register(userInfo);
-        if (IntegerUtils.isError(res)) {
-            return Result.error();
-        }
-        return Result.success();
+        return Result.error();
     }
 
     /**
      * 用户登录
      * @param username 用户名
      * @param password 密  码
-     * @param response 响  应
      * @return result
      */
     @GetMapping("/v1/user/login")
     @CrossTokenValidation
     public Result login(@RequestParam("username") String username,
-                        @RequestParam("password") String password,
-                        HttpServletResponse response) throws JWTDecodeException {
+                        @RequestParam("password") String password) throws JWTDecodeException {
         UserInfo ui = new UserInfo(username, password);
         Integer res = userService.login(ui);
         if (IntegerUtils.isNotError(res)) {
@@ -77,11 +78,7 @@ public class UserController {
             String token = JwtUtils.getToken(ui);
             // token 存入 redis
             redisTemplate.opsForValue().set(token, ui, JwtUtils.EXPIRES, TimeUnit.SECONDS);
-            // token 存入 header
-            response.addHeader("Token", token);
-            // token过期时间 存入 header
-            response.addHeader("Expires", JwtUtils.getExpires(token).toString());
-            return Result.success();
+            return Result.success(new TokenVO(token, JwtUtils.getExpires(token)));
         }
         return Result.error();
     }
@@ -140,6 +137,17 @@ public class UserController {
         if (IntegerUtils.isNotEmpty(userInfoId)) {
             UserInfo ui = userService.getUserAllInfo(userInfoId);
             if (ui != null) {
+                String root = FileUtils.ROOT_URL + FileUtils.USER_VISIT_URL;
+                String img = ui.getUserDetail().getUserImg();
+                if (StringUtils.isNotEmpty(img)) {
+                    ui.getUserDetail().setUserImg(root + img);
+                } else {
+                    ui.getUserDetail().setUserImg(StringUtils.EMPTY);
+                }
+                String phone = ui.getUserPhone();
+                if (StringUtils.isNotEmpty(phone)) {
+                    ui.setUserPhone(UserUtils.phoneEncrypt(phone));
+                }
                 return Result.success(new UserVO(ui));
             }
             return Result.success();

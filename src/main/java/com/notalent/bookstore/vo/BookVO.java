@@ -2,12 +2,10 @@ package com.notalent.bookstore.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.notalent.bookstore.pojo.book.BookInfo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Date;
 
@@ -40,7 +38,7 @@ public class BookVO {
     private String publishingHouse; // 出版社
 
     @JsonProperty("pubDate")
-    @JsonFormat(pattern = "yyyy-MM")
+    @JsonFormat(pattern = "yyyy年MM月")
     private Date publishingTime;    // 出版时间
 
     @JsonProperty("isbn")

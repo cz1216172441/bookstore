@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- AdvertisementMapper.xml
+     create by noTalent
+     2019.05.22 -->
+<mapper namespace="com.notalent.bookstore.mapper.AdvertisementMapper">
+
+    <resultMap id="advertisementInfoMap" type="com.notalent.bookstore.pojo.advertisement.AdvertisementInfo">
+        <id column="advertisement_info_id" property="advertisementInfoId" />
+        <result column="advertisement_info_title" property="advertisementInfoTitle" />
+        <result column="advertisement_info_intro" property="advertisementInfoIntro" />
+        <result column="advertisement_info_img" property="advertisementInfoImg" />
+        <result column="begin_time" property="beginTime" />
+        <result column="end_time" property="endTime" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="advertisementDetailMap" type="com.notalent.bookstore.pojo.advertisement.AdvertisementDetail">
+        <id column="advertisement_detail_id" property="advertisementDetailId" />
+        <result column="advertisement_info_id" property="advertisementInfoId" />
+        <result column="book_info_id" property="bookInfoId" />
+        <result column="purchase_discount" property="purchaseDiscount" javaType="java.math.BigDecimal" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 添加广告信息 -->
+    <insert id="addAdvertisementInfo" parameterType="com.notalent.bookstore.pojo.advertisement.AdvertisementInfo">
+        insert into
+            advertisement_info (advertisement_info_title, advertisement_info_intro, advertisement_info_img, begin_time, end_time)
+        values
+            (#{advertisementInfoTitle}, #{advertisementInfoIntro}, #{advertisementInfoImg}, #{beginTime}, #{endTime})
+    </insert>
+
+    <!-- 添加广告详情 -->
+    <insert id="addAdvertisementDetail" parameterType="com.notalent.bookstore.pojo.advertisement.AdvertisementDetail">
+        insert into
+            advertisement_detail (advertisement_info_id, book_info_id, purchase_discount)
+        values
+            (#{advertisementInfoId}, #{bookInfoId}, #{purchaseDiscount})
+    </insert>
+
+    <!-- 获取广告信息 -->
+    <select id="getAdvertisementById" parameterType="java.lang.Integer" resultMap="advertisementInfoMap">
+        select * from advertisement_info where advertisement_info_id = #{advertisementInfoId} limit 1
+    </select>
+
+    <!-- 获取广告列表 -->
+    <select id="listAdvertisementInfo" resultMap="advertisementInfoMap">
+        select * from advertisement_info
+        where begin_time &lt; now() and end_time &gt; now()
+        order by begin_time
+        desc
+    </select>
+
+</mapper>

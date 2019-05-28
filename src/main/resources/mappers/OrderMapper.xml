@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- OrderMapper.xml
+     create by noTalent
+     2019.05.22 -->
+<mapper namespace="com.notalent.bookstore.mapper.OrderMapper">
+
+    <resultMap id="orderInfoMap" type="com.notalent.bookstore.pojo.order.OrderInfo">
+        <id column="order_info_id" property="orderInfoId" />
+        <result column="user_info_id" property="userInfoId" />
+        <result column="receiver_address_id" property="receiverAddressId" />
+        <result column="payment_mode" property="paymentMode" />
+        <result column="payment_order" property="paymentOrder" />
+        <result column="payment_time" property="paymentTime" />
+        <result column="deliver_time" property="deliverTime" />
+        <result column="finish_time" property="finishTime" />
+        <result column="order_status" property="orderStatus" />
+        <result column="create_time" property="createTime" />
+        <collection property="orderDetail" resultMap="orderDetailMap" ofType="com.notalent.bookstore.pojo.order.OrderDetail"></collection>
+    </resultMap>
+
+    <resultMap id="orderDetailMap" type="com.notalent.bookstore.pojo.order.OrderDetail">
+        <id column="order_detail_id" property="orderDetailId" />
+        <result column="order_info_id" property="orderInfoId" />
+        <result column="book_info_id" property="bookInfoId" />
+        <result column="purchase_quantity" property="purchaseQuantity" />
+        <result column="purchase_price" property="purchasePrice" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 添加订单信息 -->
+    <insert id="addOrderInfo" parameterType="com.notalent.bookstore.pojo.order.OrderInfo">
+        insert into order_info (order_info_id, user_info_id, receiver_address_id, order_status)
+        values (#{orderInfoId}, #{userInfoId}, #{receiverAddressId}, 0)
+    </insert>
+
+    <!-- 添加订单详情 -->
+    <insert id="addOrderDetail" parameterType="com.notalent.bookstore.pojo.order.OrderDetail">
+        insert into order_detail (order_info_id, purchase_quantity, purchase_price)
+        values (#{orderInfoId}, #{purchaseQuantity}, #{purchasePrice})
+    </insert>
+
+    <update id="updateOrderInfo" parameterType="com.notalent.bookstore.pojo.order.OrderInfo">
+        <if test="orderInfoId != null and orderInfoId != ''">
+            update
+                order_info
+            <set>
+                <if test="paymentMode != null and paymentMode != ''">
+                    payment_mode = #{paymentMode},
+                </if>
+                <if test="paymentOrder != null and paymentOrder != ''">
+                    payment_order = #{paymentOrder},
+                </if>
+                <if test="paymentTime != null">
+                    payment_time = #{paymentTime},
+                </if>
+                <if test="deliverTime != null">
+                    deliver_time = #{deliverTime},
+                </if>
+                <if test="finishTime != null">
+                    finish_time = #{finishTime},
+                </if>
+                <if test="orderStatus != null">
+                    order_status = #{orderStatus}
+                </if>
+            </set>
+            where
+                order_info_id = #{orderInfoId}
+            limit 1
+        </if>
+    </update>
+
+<!--    <update id="updateOrderDetail" parameterType="com.notalent.bookstore.pojo.order.OrderDetail">-->
+<!--        <if test="orderDetailId != null">-->
+<!--            update-->
+<!--                order_detail-->
+<!--            <set>-->
+<!--                <if test=""-->
+<!--            </set>-->
+<!--        </if>-->
+<!--    </update>-->
+
+</mapper>

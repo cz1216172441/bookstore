@@ -36,19 +36,21 @@ public class UserServiceImpl implements UserService {
         userInfo.setPassword(ShiroUtils.encrypt(userInfo.getPassword(), salt));
         // 插入数据库
         Integer res = userMapper.addUserInfo(userInfo);
-        if (IntegerUtils.isError(res)) {
-            return IntegerUtils.ZERO;
+        if (IntegerUtils.isNotError(res)) {
+            UserDetail ud = new UserDetail(userInfo.getUserInfoId(), "用户" + System.currentTimeMillis());
+            return userMapper.addUserDetail(ud);
         }
-        UserDetail ud = new UserDetail(userInfo.getUserInfoId(), userInfo.getUsername());
-        return userMapper.addUserDetail(ud);
+        return IntegerUtils.ZERO;
     }
 
     @Override
     public Integer login(UserInfo ui) {
         UserInfo userInfo = userMapper.getPasswordAndSalt(ui.getUsername());
-        // 加盐加密比对密码
-        if (ShiroUtils.encrypt(ui.getPassword(), userInfo.getSalt()).equals(userInfo.getPassword())) {
-            return userInfo.getUserInfoId();
+        if (userInfo != null) {
+            // 加盐加密比对密码
+            if (ShiroUtils.encrypt(ui.getPassword(), userInfo.getSalt()).equals(userInfo.getPassword())) {
+                return userInfo.getUserInfoId();
+            }
         }
         return IntegerUtils.ZERO;
     }

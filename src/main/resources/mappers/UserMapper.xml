@@ -38,8 +38,8 @@
     <!-- 添加用户信息 -->
     <insert id="addUserInfo" parameterType="com.notalent.bookstore.pojo.user.UserInfo"
             useGeneratedKeys="true" keyProperty="userInfoId">
-        insert into user_info (username, salt, password, user_phone, user_email)
-        values (#{username}, #{salt}, #{password}, #{userPhone}, #{userEmail})
+        insert into user_info (username, salt, password)
+        values (#{username}, #{salt}, #{password})
     </insert>
 
     <!-- 添加用户详情 -->
@@ -65,7 +65,7 @@
             left join
                 user_detail ud
             on ui.user_info_id = ud.user_info_id
-            and ui.user_info_id = #{userInfoId}
+            where ui.user_info_id = #{userInfoId}
             limit 1
         </if>
     </select>

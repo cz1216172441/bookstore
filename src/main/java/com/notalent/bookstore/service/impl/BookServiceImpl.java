@@ -1,5 +1,6 @@
 package com.notalent.bookstore.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.notalent.bookstore.mapper.BookMapper;
 import com.notalent.bookstore.pojo.book.BookCategory;
 import com.notalent.bookstore.pojo.book.BookDetail;
@@ -17,6 +18,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * 图书服务层实现
@@ -90,4 +92,35 @@ public class BookServiceImpl implements BookService {
         return bookMapper.updateBookDetail(bd);
     }
 
+    @Override
+    public List<BookCategory> getFirClassCategory() {
+        return bookMapper.getFirClassCategory();
+    }
+
+    @Override
+    public List<BookCategory> getSecClassCategory(Integer superCategoryId) {
+        return bookMapper.getSecClassCategory(superCategoryId);
+    }
+
+    @Override
+    public List<BookInfo> listBook() {
+        return bookMapper.listBook();
+    }
+
+    @Override
+    public List<BookInfo> listBook(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return bookMapper.listBook();
+    }
+
+    @Override
+    public List<BookInfo> listBookByCategory(Integer categoryId) {
+        return bookMapper.listBookByCategory(categoryId);
+    }
+
+    @Override
+    public List<BookInfo> listBookByCategory(Integer categoryId, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return bookMapper.listBookByCategory(categoryId);
+    }
 }

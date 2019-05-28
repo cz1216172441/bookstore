@@ -13,6 +13,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+/**
+ * 图书管理控制层
+ * @author noTalent
+ * @version 1.0
+ * 2019.05.22
+ */
 @RestController("bookAdminController")
 @RequestMapping("/book-admin/api")
 public class BookController {

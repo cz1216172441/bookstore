@@ -27,6 +27,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // 图书图片访问
         registry.addResourceHandler("/static/upload/book/**")
                 .addResourceLocations("file:" + FileUtils.FILE_URL + FileUtils.BOOK_UPLOAD_URL);
+        // 广告图片访问
+        registry.addResourceHandler("/static/upload/advertisement/**")
+                .addResourceLocations("file:" + FileUtils.FILE_URL + FileUtils.ADVERTISEMENT_UPLOAD_URL);
     }
 
     @Bean

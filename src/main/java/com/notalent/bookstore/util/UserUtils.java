@@ -18,6 +18,8 @@ public class UserUtils {
 
     public static final String REGEX_EMAIL = "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$";
 
+    public static final String ASTERISK = "******";
+
     // 性别是否不规范
     public static boolean isGenderError(String gender) {
         if (gender.length() != 1) return true;
@@ -41,4 +43,9 @@ public class UserUtils {
         return true;
     }
 
+    // 手机号码隐藏
+    public static String phoneEncrypt(String phone) {
+        return phone.substring(0, 3) + ASTERISK + phone.substring(9, 11);
+    }
 }
+

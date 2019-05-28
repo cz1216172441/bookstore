@@ -103,7 +103,7 @@ create table if not exists book_info (
 create table if not exists book_detail (
     book_detail_id int(11) not null auto_increment comment '图书详情id',
     book_info_id int(11) not null comment '图书信息id',
-    book_intro varchar(255) not null default '' comment '图书简介',
+    book_intro varchar(1000) not null default '' comment '图书简介',
     publishing_house varchar(64) not null default '' comment '出版社',
     publishing_time date not null comment '出版时间',
     book_isbn varchar(32) not null default '' comment 'ISBN',
@@ -220,7 +220,7 @@ create table if not exists order_info (
     payment_time timestamp comment '付款时间',
     deliver_time timestamp comment '发货时间',
     finish_time timestamp comment '成交时间',
-    order_status tinyint(1) not null default 0 comment '订单状态：0未付款 1未发货 2已发货 3已成交',
+    order_status tinyint(1) not null default 0 comment '订单状态：0未付款 1未发货 2已发货 3已成交 4已取消',
     create_time timestamp not null default current_timestamp comment '创建时间',
     primary key (order_info_id),
     key idx_user_info_id_2 (user_info_id)
