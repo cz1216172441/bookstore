@@ -1,5 +1,6 @@
 package com.notalent.bookstore.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.notalent.bookstore.mapper.BookMapper;
 import com.notalent.bookstore.pojo.book.BookCategory;
@@ -122,5 +123,16 @@ public class BookServiceImpl implements BookService {
     public List<BookInfo> listBookByCategory(Integer categoryId, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         return bookMapper.listBookByCategory(categoryId);
+    }
+
+    @Override
+    public List<BookInfo> listBookBySuperCategory(Integer superCategoryId) {
+        return bookMapper.listBookBySuperCategory(superCategoryId);
+    }
+
+    @Override
+    public List<BookInfo> listBookBySuperCategory(Integer superCategoryId, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return bookMapper.listBookBySuperCategory(superCategoryId);
     }
 }

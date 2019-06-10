@@ -55,4 +55,15 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         PageHelper.startPage(pageNum, pageSize);
         return advertisementMapper.listAdvertisementInfo();
     }
+
+    @Override
+    @Transactional
+    public Integer updateAdvertisement(MultipartFile file, AdvertisementInfo advertisementInfo) throws IOException {
+        if (file != null) {
+            String root = FileUtils.FILE_URL + FileUtils.ADVERTISEMENT_UPLOAD_URL;
+            String fileName = FileUtils.uploadFile(file, root);
+            advertisementInfo.setAdvertisementInfoImg(fileName);
+        }
+        return advertisementMapper.updateAdvertisement(advertisementInfo);
+    }
 }

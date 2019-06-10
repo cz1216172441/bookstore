@@ -30,4 +30,7 @@ public interface AdvertisementService {
     // 获取广告列表
     List<AdvertisementInfo> listAdvertisementInfo(Integer pageNum, Integer pageSize);
 
+    // 修改广告信息
+    Integer updateAdvertisement(MultipartFile file, AdvertisementInfo advertisementInfo) throws IOException;
+
 }

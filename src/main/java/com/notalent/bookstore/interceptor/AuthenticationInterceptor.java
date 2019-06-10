@@ -9,6 +9,7 @@ import com.notalent.bookstore.pojo.user.UserInfo;
 import com.notalent.bookstore.util.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -24,6 +25,7 @@ import java.lang.reflect.Method;
  * @version 1.0
  * 2019.05.16
  */
+@CrossOrigin("*")
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Resource

@@ -34,6 +34,11 @@ public interface BookService {
 
     List<BookInfo> listBookByCategory(Integer categoryId, Integer pageNum, Integer pageSize);
 
+    // 图书列表（按父级分类）
+    List<BookInfo> listBookBySuperCategory(Integer superCategoryId);
+
+    List<BookInfo> listBookBySuperCategory(Integer superCategoryId, Integer pageNum, Integer pageSize);
+
     // 获取图书一级分类
     List<BookCategory> getFirClassCategory();
 

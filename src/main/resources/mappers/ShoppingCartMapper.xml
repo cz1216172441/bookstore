@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- shoppingCartMapper.xml
+     create by noTalent
+     2019.06.10 -->
+<mapper namespace="com.notalent.bookstore.mapper.ShoppingCartMapper">
+
+    <resultMap id="shoppingCartMap" type="com.notalent.bookstore.pojo.shoppingcart.ShoppingCart">
+        <id column="shopping_cart_id" property="shoppingCartId" />
+        <result column="user_info_id" property="userInfoId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="shoppingCartDetailMap" type="com.notalent.bookstore.pojo.shoppingcart.ShoppingCartDetail">
+        <id column="shopping_cart_detail_id" property="shoppingCartDetailId" />
+        <result column="shopping_cart_id" property="shoppingCartId" />
+        <result column="book_info_id" property="bookInfoId" />
+        <result column="book_quantity" property="bookQuantity" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 创建购物车 -->
+    <insert id="addShoppingCart" parameterType="java.lang.Integer">
+        insert into shopping_cart (user_info_id) values (#{userInfoId})
+    </insert>
+
+    <!-- 加入购物车 -->
+    <insert id="addShoppingCartDetail" parameterType="com.notalent.bookstore.pojo.shoppingcart.ShoppingCartDetail">
+        insert into shopping_cart_detail (shopping_cart_id, book_info_id, book_quantity)
+        values (#{shoppingCartId}, #{bookInfoId}, #{bookQuantity})
+    </insert>
+
+    <!-- 获取购物车id -->
+    <select id="getShoppingCartId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select shopping_cart_id from shopping_cart where user_info_id = #{userInfoId} limit 1
+    </select>
+
+    <!-- 获取商品 -->
+    <select id="getProduct" parameterType="java.lang.Integer" resultMap="shoppingCartDetailMap">
+        select * from shopping_cart_detail
+        where
+            shopping_cart_id = #{shoppingCartId}
+        and
+            book_info_id = #{bookInfoId}
+        limit 1
+    </select>
+
+    <!-- 购物车列表 -->
+
+    <!-- 更新商品数量 -->
+    <update id="updateProductQuantity" parameterType="com.notalent.bookstore.pojo.shoppingcart.ShoppingCartDetail">
+        <if test="shoppingCartDetailId != null">
+            update shopping_cart_detail
+            <set>
+                <if test="bookQuantity != null">
+                    book_quantity = #{bookQuantity}
+                </if>
+            </set>
+            where
+                shopping_cart_detail_id = #{shoppingCartDetailId}
+            limit 1
+        </if>
+    </update>
+
+    <!-- 从购物车删除商品 -->
+    <delete id="deleteProduct" parameterType="java.lang.Integer">
+        delete from shopping_cart_detail where shopping_cart_detail_id = #{shoppingCartDetailId} limit 1
+    </delete>
+
+    <!-- 清空购物车 -->
+    <delete id="deleteProducts" parameterType="java.lang.Integer">
+        delete from shopping_cart_detail where shopping_cart_id = #{shoppingCartId}
+    </delete>
+
+</mapper>

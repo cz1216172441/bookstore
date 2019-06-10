@@ -7,7 +7,9 @@ import com.notalent.bookstore.pojo.book.BookInfo;
 import com.notalent.bookstore.service.BookService;
 import com.notalent.bookstore.util.BookUtils;
 import com.notalent.bookstore.util.FileUtils;
+import com.notalent.bookstore.util.IntegerUtils;
 import com.notalent.bookstore.util.Result;
+import com.notalent.bookstore.vo.BookCategoryVO;
 import com.notalent.bookstore.vo.BookVO;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/book/api")
+@CrossOrigin("*")
 public class BookController {
 
     @Autowired
@@ -77,6 +80,18 @@ public class BookController {
     @CrossTokenValidation
     public Result listBookByCategory(Integer categoryId, Integer pageNum,
                                      Integer pageSize) {
+        long count = bookService.getFirClassCategory()
+                .stream()
+                .filter(bookCategory -> bookCategory.getCategoryId() == categoryId)
+                .count();
+        if (count > IntegerUtils.ZERO) {
+            List<BookInfo> bookInfos = bookService.listBookBySuperCategory(categoryId, pageNum, pageSize);
+            if (CollectionUtils.isNotEmpty(bookInfos)) {
+                List<BookVO> list = BookUtils.getBookVOList(bookInfos);
+                return Result.success(list);
+            }
+            return Result.success();
+        }
         List<BookInfo> bookInfos = bookService.listBookByCategory(categoryId, pageNum, pageSize);
         if (CollectionUtils.isNotEmpty(bookInfos)) {
             List<BookVO> list = BookUtils.getBookVOList(bookInfos);
@@ -106,6 +121,20 @@ public class BookController {
     public Result getSecClassCategory(@RequestParam("superCategoryId") Integer superCategoryId) {
         List<BookCategory> bookCategories = bookService.getSecClassCategory(superCategoryId);
         return Result.success(BookUtils.getBookCategoryVOList(bookCategories));
+    }
+
+    /**
+     * 获取图书分类名
+     * @param categoryId
+     * @return result
+     */
+    @GetMapping("/v1/category-name/get")
+    @CrossTokenValidation
+    public Result getCategoryName(Integer categoryId) {
+        String categoryName = bookService.getCategoryName(categoryId);
+        BookCategory category = new BookCategory();
+        category.setCategoryName(categoryName);
+        return Result.success(new BookCategoryVO(category));
     }
 
 }

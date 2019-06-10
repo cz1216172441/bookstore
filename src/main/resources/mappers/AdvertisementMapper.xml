@@ -56,4 +56,30 @@
         desc
     </select>
 
+    <!-- 修改广告信息 -->
+    <update id="updateAdvertisement" parameterType="com.notalent.bookstore.pojo.advertisement.AdvertisementInfo">
+        <if test="advertisementInfoId != null">
+            update advertisement_info
+            <set>
+                <if test="advertisementInfoTitle != null and advertisementInfoTitle != ''">
+                    advertisement_info_title = #{advertisementInfoTitle},
+                </if>
+                <if test="advertisementInfoIntro != null and advertisementInfoIntro != ''">
+                    advertisement_info_intro = #{advertisementInfoIntro},
+                </if>
+                <if test="advertisementInfoImg != null and advertisementInfoImg != ''">
+                    advertisement_info_img = #{advertisementInfoImg},
+                </if>
+                <if test="beginTime != null">
+                    begin_time = #{beginTime},
+                </if>
+                <if test="endTime != null">
+                    end_time = #{beginTime}
+                </if>
+            </set>
+            where advertisement_info_id = #{advertisementInfoId}
+            limit 1
+        </if>
+    </update>
+
 </mapper>

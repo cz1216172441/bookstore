@@ -35,8 +35,11 @@ public interface BookMapper {
     // 图书列表（时间降序）
     List<BookInfo> listBook();
 
-    // 图书列表（按分类）
+    // 图书列表（按二级分类）
     List<BookInfo> listBookByCategory(Integer categoryId);
+
+    // 图书列表（按父级分类）
+    List<BookInfo> listBookBySuperCategory(Integer superCategoryId);
 
     // 获取图书分类
     BookCategory getCategoryById(Integer categoryId);

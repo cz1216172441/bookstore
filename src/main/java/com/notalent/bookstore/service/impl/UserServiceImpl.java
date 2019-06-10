@@ -1,5 +1,6 @@
 package com.notalent.bookstore.service.impl;
 
+import com.notalent.bookstore.mapper.ShoppingCartMapper;
 import com.notalent.bookstore.mapper.UserMapper;
 import com.notalent.bookstore.pojo.user.UserDetail;
 import com.notalent.bookstore.pojo.user.UserInfo;
@@ -27,6 +28,10 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserMapper userMapper;
 
+    @Resource
+    private ShoppingCartMapper shoppingCartMapper;
+
+
     @Override
     @Transactional
     public Integer register(UserInfo userInfo) {
@@ -38,6 +43,7 @@ public class UserServiceImpl implements UserService {
         Integer res = userMapper.addUserInfo(userInfo);
         if (IntegerUtils.isNotError(res)) {
             UserDetail ud = new UserDetail(userInfo.getUserInfoId(), "用户" + System.currentTimeMillis());
+            shoppingCartMapper.addShoppingCart(userInfo.getUserInfoId());
             return userMapper.addUserDetail(ud);
         }
         return IntegerUtils.ZERO;

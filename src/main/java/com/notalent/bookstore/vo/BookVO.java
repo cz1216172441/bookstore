@@ -57,7 +57,7 @@ public class BookVO {
     private Boolean bookStatus;             // 图书状态
 
     @JsonProperty("infoImg")
-    private String bookInfoImg;             // 图书封面图片
+    private String[] bookInfoImg;             // 图书封面图片
 
     @JsonProperty("detailImg")
     private String bookDetailImg;           // 图书详情图片
@@ -66,7 +66,13 @@ public class BookVO {
         this.bookInfoId = bookInfo.getBookInfoId();
         this.bookName = bookInfo.getBookName();
         this.bookAuthor = bookInfo.getBookAuthor();
-        this.bookInfoImg = bookInfo.getBookInfoImg();
+        String tmp = bookInfo.getBookInfoImg();
+        if (tmp.contains(";")) {
+            this.bookInfoImg = tmp.split(";");
+        } else {
+            this.bookInfoImg = new String[1];
+            this.bookInfoImg[0] = tmp;
+        }
         DecimalFormat format = new DecimalFormat("0.00");
         this.bookActualPrice = format.format(bookInfo.getBookActualPrice());
         this.bookOriginalPrice = format.format(bookInfo.getBookOriginalPrice());

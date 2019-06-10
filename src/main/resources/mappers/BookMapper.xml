@@ -118,6 +118,31 @@
             *
         from
             book_info bi
+        left join
+            book_category bc
+            on
+                bi.category_id = bc.category_id
+        left join
+            book_detail bd
+            on
+                bi.book_info_id = bd.book_info_id
+        left join
+            book_sku bs
+            on
+                bi.book_info_id = bs.book_info_id
+        where
+            bi.category_id = #{categoryId}
+        order by
+            bi.create_time
+            desc
+    </select>
+
+    <!-- 图书列表（父级图书分类） -->
+    <select id="listBookBySuperCategory" parameterType="java.lang.Integer" resultMap="bookMap">
+        select
+            *
+        from
+            book_info bi
                 left join
             book_category bc
             on
@@ -125,13 +150,13 @@
                 left join
             book_detail bd
             on
-                bi.book_info_id = bd.book_info_id
+                bd.book_info_id = bi.book_info_id
                 left join
             book_sku bs
             on
                 bi.book_info_id = bs.book_info_id
         where
-            bi.category_id = #{categoryId}
+            bc.super_category_id = 1
         order by
             bi.create_time
             desc

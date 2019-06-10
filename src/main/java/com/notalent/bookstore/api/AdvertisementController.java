@@ -8,10 +8,7 @@ import com.notalent.bookstore.util.Result;
 import com.notalent.bookstore.vo.AdvertisementVO;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/advertisement/api")
+@CrossOrigin("*")
 public class AdvertisementController {
 
     @Autowired

@@ -280,16 +280,27 @@ create table if not exists advertisement_detail (
 -- 购物车模块
 --
 
--- shopping_cart_info 购物车信息
+-- shopping_cart 购物车信息
 create table if not exists shopping_cart (
     shopping_cart_id int(11) not null auto_increment comment '购物车信息id',
     user_info_id int(11) not null comment '用户信息id',
+    create_time timestamp not null default current_timestamp comment '创建时间',
+    update_time timestamp not null default current_timestamp
+        on update current_timestamp comment '更新时间',
+    primary key (shopping_cart_id)
+);
+
+-- shopping_cart_detail 购物车详情
+create table if not exists shopping_cart_detail (
+    shopping_cart_detail_id int(11) not null auto_increment comment '购物车详情id',
+    shopping_cart_id int(11) not null comment '购物车信息id',
     book_info_id int(11) not null comment '图书信息id',
     book_quantity int(11) not null default 1 comment '图书数量',
     create_time timestamp not null default current_timestamp comment '创建时间',
     update_time timestamp not null default current_timestamp
         on update current_timestamp comment '更新时间',
-    primary key (shopping_cart_id)
+    primary key (shopping_cart_detail_id),
+    key idx_shopping_cart_id (shopping_cart_id)
 );
 
 

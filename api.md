@@ -687,3 +687,44 @@ API文档
 }
 ```
 
+<hr/>
+
+### ShoppingCart Module 购物车模块
+
+**API列表**
+
+- /shoppingCart/api/v1/product/add **加入购物车**
+
+<hr/>
+
+**/shoppingCart/api/v1/product/add** 
+
+**加入购物车**
+
+**方法：POST**
+
+**请求参数**
+
+| 参数名    | 必选 | 类型    | 描述       |
+| --------- | ---- | ------- | ---------- |
+| booInfoId | 是   | Integer | 图书信息id |
+
+**Header**
+
+| 参数名 | 必选 | 类型   | 描述 |
+| ------ | ---- | ------ | ---- |
+| Token  | 是   | String | 令牌 |
+
+**响应**
+
+```javascript
+{
+    "code": 0,
+    "msg": "ok",
+    "data": {}
+}
+```
+
+<hr/>
+
+### 

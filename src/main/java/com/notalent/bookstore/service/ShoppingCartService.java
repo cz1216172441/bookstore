@@ -1,18 +1,14 @@
-package com.notalent.bookstore.mapper;
+package com.notalent.bookstore.service;
 
-import com.notalent.bookstore.pojo.shoppingcart.ShoppingCart;
 import com.notalent.bookstore.pojo.shoppingcart.ShoppingCartDetail;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 /**
- * 购物车mapper层
+ * 购物车服务层
  * @author noTalent
  * @version 1.0
- * 2019.05.12
+ * 2019.06.10
  */
-@Mapper
-public interface ShoppingCartMapper {
+public interface ShoppingCartService {
 
     // 创建购物车
     Integer addShoppingCart(Integer userInfoId);
@@ -33,7 +29,6 @@ public interface ShoppingCartMapper {
     Integer getShoppingCartId(Integer userInfoId);
 
     // 获取商品
-    ShoppingCartDetail getProduct(@Param("shoppingCartId") Integer shoppingCartId,
-                                  @Param("bookInfoId") Integer bookInfoId);
+    ShoppingCartDetail getProduct(Integer shoppingCartId, Integer bookInfoId);
 
 }

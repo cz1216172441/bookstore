@@ -3,6 +3,7 @@ package com.notalent.bookstore.api.admin;
 import com.notalent.bookstore.jwt.CrossTokenValidation;
 import com.notalent.bookstore.pojo.advertisement.AdvertisementInfo;
 import com.notalent.bookstore.service.AdvertisementService;
+import com.notalent.bookstore.util.AdvertisementUtils;
 import com.notalent.bookstore.util.IntegerUtils;
 import com.notalent.bookstore.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,18 @@ public class AdvertisementController {
     @CrossTokenValidation
     public Result addAdvertisementInfo(@RequestParam("file") MultipartFile file,
                                        AdvertisementInfo advertisementInfo) throws IOException {
+        if (AdvertisementUtils.isError(advertisementInfo)) {
+            return Result.error();
+        }
         if (IntegerUtils.isNotError(advertisementService.addAdvertisementInfo(file, advertisementInfo))) {
+            return Result.success();
+        }
+        return Result.error();
+    }
+
+    public Result updateAdvertisementInfo(@RequestParam(value = "file", required = false) MultipartFile file,
+                                          AdvertisementInfo advertisementInfo) throws IOException {
+        if (IntegerUtils.isNotError(advertisementService.updateAdvertisement(file, advertisementInfo))) {
             return Result.success();
         }
         return Result.error();

@@ -27,6 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/address/api")
+@CrossOrigin("*")
 public class AddressController {
 
     @Autowired

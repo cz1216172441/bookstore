@@ -27,4 +27,7 @@ public interface AdvertisementMapper {
     // 获取广告列表
     List<AdvertisementInfo> listAdvertisementInfo();
 
+    // 修改广告信息
+    Integer updateAdvertisement(AdvertisementInfo advertisementInfo);
+
 }
